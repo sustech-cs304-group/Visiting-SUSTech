@@ -8,7 +8,7 @@
         <version>3.0.5</version>
         <relativePath/> <!-- lookup parent from repository -->
     </parent>
-    <groupId>com.cs304</groupId>
+    <groupId>com.sustech.cs304</groupId>
     <artifactId>Visiting-SUSTech</artifactId>
     <version>0.0.1-SNAPSHOT</version>
     <name>Visiting-SUSTech</name>

@@ -1,4 +1,4 @@
-package com.cs304.visitingsustech;
+package com.sustech.cs304.visitingsustech;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
