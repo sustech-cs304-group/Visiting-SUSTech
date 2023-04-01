@@ -11,7 +11,7 @@ import java.sql.Timestamp;
 public class AppointmentEntity {
     @TableId
     private Integer id;
-    private Integer userId;
+    private String openid;
     private Timestamp entryTime;
     private Timestamp departureTime;
     private String status;

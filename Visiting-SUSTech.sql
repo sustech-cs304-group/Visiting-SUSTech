@@ -2,17 +2,17 @@ drop table if exists appointment;
 drop table if exists user_info;
 
 create table user_info(
-                          id serial primary key,
+                          openid text primary key,
                           name text,
                           phone varchar(11),
                           identity_card varchar(18),
-                          wechat_id text,
+                          gender int,
                           type char(10)
 );
 
 create table appointment(
                             id serial primary key,
-                            user_id int references user_info(id),
+                            openid text references user_info(openid),
                             entry_time timestamp not null,
                             departure_time timestamp not null,
                             status varchar(10) not null,
