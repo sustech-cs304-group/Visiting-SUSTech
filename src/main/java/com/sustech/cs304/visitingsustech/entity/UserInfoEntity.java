@@ -10,6 +10,8 @@ import lombok.Data;
 public class UserInfoEntity {
     @TableId
     private String openid;
+    private String nickname;
+    private String avatarUrl;
     private String name;
     private String phone;
     private String identityCard;
