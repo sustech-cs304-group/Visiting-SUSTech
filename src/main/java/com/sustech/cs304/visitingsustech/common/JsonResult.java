@@ -44,35 +44,43 @@ public class JsonResult<E> {
         }
     }
 
+    public static <E> JsonResult<E> success(String message) {
+        return new JsonResult<>(200, message);
+    }
+
     public static <E> JsonResult<E> success() {
-        return new JsonResult<E>(200, "success");
+        return new JsonResult<>(200, "success");
     }
 
     public static <E> JsonResult<E> success(E data) {
-        return new JsonResult<E>(200, "success", data);
+        return new JsonResult<>(200, "success", data);
     }
 
     public static <E> JsonResult<E> success(String message, E data) {
-        return new JsonResult<E>(200, message, data);
+        return new JsonResult<>(200, message, data);
     }
 
     public static <E> JsonResult<E> success(int code, String message, E data) {
-        return new JsonResult<E>(code, message, data);
+        return new JsonResult<>(code, message, data);
+    }
+
+    public static <E> JsonResult<E> error(String message) {
+        return new JsonResult<>(500, message);
     }
 
     public static <E> JsonResult<E> error() {
-        return new JsonResult<E>(500, "error");
+        return new JsonResult<>(500, "error");
     }
 
     public static <E> JsonResult<E> error(String message, E data) {
-        return new JsonResult<E>(500, message, data);
+        return new JsonResult<>(500, message, data);
     }
 
     public static <E> JsonResult<E> error(int code, String message) {
-        return new JsonResult<E>(code, message);
+        return new JsonResult<>(code, message);
     }
 
     public static <E> JsonResult<E> error(int code, String message, E data) {
-        return new JsonResult<E>(code, message, data);
+        return new JsonResult<>(code, message, data);
     }
 }
