@@ -4,10 +4,14 @@ import com.sustech.cs304.visitingsustech.common.JsonResult;
 import com.sustech.cs304.visitingsustech.entity.AppointmentEntity;
 import com.sustech.cs304.visitingsustech.service.AppointmentService;
 import com.sustech.cs304.visitingsustech.util.JwtUtil;
+import com.sustech.cs304.visitingsustech.vo.AppointmentVo;
+import com.sustech.cs304.visitingsustech.vo.UserInfoVo;
 import jakarta.servlet.http.HttpServletRequest;
+import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
@@ -24,19 +28,14 @@ public class AppointmentController {
     private JwtUtil jwtUtil;
 
     @PostMapping("/add")
-    public JsonResult<Void> addAppointment(@RequestParam("start") Timestamp entryTime,
-                                           @RequestParam("end") Timestamp departureTime,
-                                           @RequestParam("accName") String accompanyingName,
-                                           @RequestParam("accIdCard") String accompanyingIdentityCard,
+    public JsonResult<Void> addAppointment(@RequestBody AppointmentVo appointmentVo,
                                            HttpServletRequest request) {
         String token = request.getHeader("Authorization");
         String openid = jwtUtil.getOpenidFromToken(token);
         AppointmentEntity appointmentEntity = new AppointmentEntity();
+        BeanUtils.copyProperties(appointmentVo, appointmentEntity);
         appointmentEntity.setOpenid(openid);
-        appointmentEntity.setEntryTime(entryTime);
-        appointmentEntity.setDepartureTime(departureTime);
-        appointmentEntity.setAccompanyingName(accompanyingName);
-        appointmentEntity.setAccompanyingIdentityCard(accompanyingIdentityCard);
+        appointmentEntity.setStatus("未验证");
         String res = appointmentService.Validation(appointmentEntity);
         if (Objects.equals(res, "true")) {
             appointmentService.addAppointment(appointmentEntity);
@@ -61,23 +60,13 @@ public class AppointmentController {
     }
 
     @PostMapping("/update")
-    public JsonResult<Void> updateAppointment(@RequestParam("id") Integer id,
-                                              @RequestParam("start") Timestamp entryTime,
-                                              @RequestParam("end") Timestamp departureTime,
-                                              @RequestParam("status") String status,
-                                              @RequestParam("accName") String accompanyingName,
-                                              @RequestParam("accIdCard") String accompanyingIdentityCard,
+    public JsonResult<Void> updateAppointment(@RequestBody AppointmentVo appointmentVo,
                                               HttpServletRequest request) {
         String token = request.getHeader("Authorization");
         String openid = jwtUtil.getOpenidFromToken(token);
         AppointmentEntity appointmentEntity = new AppointmentEntity();
-        appointmentEntity.setId(id);
+        BeanUtils.copyProperties(appointmentVo, appointmentEntity);
         appointmentEntity.setOpenid(openid);
-        appointmentEntity.setEntryTime(entryTime);
-        appointmentEntity.setDepartureTime(departureTime);
-        appointmentEntity.setAccompanyingName(accompanyingName);
-        appointmentEntity.setAccompanyingIdentityCard(accompanyingIdentityCard);
-        appointmentEntity.setStatus(status);
         String res = appointmentService.Validation(appointmentEntity);
         if (Objects.equals(res, "true")) {
             appointmentService.updateAppointment(appointmentEntity);

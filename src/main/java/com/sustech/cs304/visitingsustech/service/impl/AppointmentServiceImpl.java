@@ -43,10 +43,6 @@ public class AppointmentServiceImpl extends ServiceImpl<AppointmentMapper, Appoi
 
     @Override
     public void addAppointment(AppointmentEntity appointmentEntity) {
-        QueryWrapper<AppointmentEntity> appointmentWrapper = new QueryWrapper<AppointmentEntity>().isNotNull("id");
-        List<Map<String, Object>> maps = appointmentMapper.selectMaps(appointmentWrapper);
-        appointmentEntity.setId(maps.size());
-        appointmentEntity.setStatus("未验证");
         appointmentMapper.insert(appointmentEntity);
     }
 
@@ -70,7 +66,7 @@ public class AppointmentServiceImpl extends ServiceImpl<AppointmentMapper, Appoi
 
     @Override
     public void updateAppointment(AppointmentEntity appointmentEntity) {
-        appointmentMapper.update(appointmentEntity, new QueryWrapper<AppointmentEntity>().eq("id", appointmentEntity.getId()));
+        appointmentMapper.updateById(appointmentEntity);
     }
 
     @Override
