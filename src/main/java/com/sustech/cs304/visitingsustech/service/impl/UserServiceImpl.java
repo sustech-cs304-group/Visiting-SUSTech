@@ -1,5 +1,6 @@
 package com.sustech.cs304.visitingsustech.service.impl;
 
+import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.sustech.cs304.visitingsustech.entity.UserInfoEntity;
 import com.sustech.cs304.visitingsustech.mapper.UserInfoMapper;
 import com.sustech.cs304.visitingsustech.service.UserService;
@@ -9,7 +10,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 @Service
-public class UserServiceImpl implements UserService {
+public class UserServiceImpl extends ServiceImpl<UserInfoMapper, UserInfoEntity> implements UserService {
     @Autowired
     UserInfoMapper userInfoMapper;
 
