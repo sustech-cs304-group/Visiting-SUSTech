@@ -4,6 +4,7 @@ import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.sustech.cs304.visitingsustech.entity.AppointmentEntity;
 import com.sustech.cs304.visitingsustech.entity.UserInfoEntity;
+import com.sustech.cs304.visitingsustech.exception.AppointmentException;
 import com.sustech.cs304.visitingsustech.mapper.AppointmentMapper;
 import com.sustech.cs304.visitingsustech.mapper.UserInfoMapper;
 import com.sustech.cs304.visitingsustech.service.AppointmentService;
@@ -21,52 +22,38 @@ public class AppointmentServiceImpl extends ServiceImpl<AppointmentMapper, Appoi
     private UserInfoMapper userInfoMapper;
 
     @Override
-    public String Validation(AppointmentEntity appointmentEntity) {
-        if ((appointmentEntity.getEntryTime().getTime() - appointmentEntity.getDepartureTime().getTime()) <= 0) {
-            return "false+Invalid Time";
-        }
-
+    public void validation(AppointmentEntity appointmentEntity) {
+        if ((appointmentEntity.getEntryTime().getTime() - appointmentEntity.getDepartureTime().getTime()) <= 0)
+            throw new AppointmentException("Invalid Time");
         QueryWrapper<UserInfoEntity> userIndoWrapper = new QueryWrapper<UserInfoEntity>()
                 .eq("openid", appointmentEntity.getOpenid());
         List<Map<String, Object>> maps = userInfoMapper.selectMaps(userIndoWrapper);
-        if (maps.size() == 0) {
-            return "false+Invalid UserID";
-        }
-
+        if (maps.size() == 0)
+            throw new AppointmentException("Invalid UserID");
         if (appointmentEntity.getAccompanyingName().length() > 0 &&
-                appointmentEntity.getAccompanyingIdentityCard().length() != 18) {
-            return "false+Invalid accompanyingIdentityCard";
-        }
-
-        return "true";
+                appointmentEntity.getAccompanyingIdentityCard().length() != 18)
+            throw new AppointmentException("Invalid accompanyingIdentityCard");
     }
 
     @Override
-    public void addAppointment(AppointmentEntity appointmentEntity) {
-        appointmentMapper.insert(appointmentEntity);
+    public int addAppointment(AppointmentEntity appointmentEntity) {
+        validation(appointmentEntity);
+        return appointmentMapper.insert(appointmentEntity);
     }
 
-    public String Validation(Integer id, String openid) {
+    @Override
+    public int deleteAppointment(Integer id, String openid) {
         QueryWrapper<AppointmentEntity> appointmentQueryWrapper = new QueryWrapper<AppointmentEntity>()
                 .eq("openid", openid).eq("id", id);
-        List<Map<String, Object>> maps = appointmentMapper.selectMaps(appointmentQueryWrapper);
-        if (maps.size() == 0) {
-            return "false+Invalid ID and UserID";
-        }
-
-        return "true";
+        List<Map<String, Object>> res = appointmentMapper.selectMaps(appointmentQueryWrapper);
+        if (res.size() == 0)
+            throw new AppointmentException("Appointment Not Found");
+        return appointmentMapper.delete(appointmentQueryWrapper);
     }
 
     @Override
-    public void deleteAppointment(Integer id, String openid) {
-        QueryWrapper<AppointmentEntity> appointmentQueryWrapper = new QueryWrapper<AppointmentEntity>()
-                .eq("openid", openid).eq("id", id);
-        appointmentMapper.delete(appointmentQueryWrapper);
-    }
-
-    @Override
-    public void updateAppointment(AppointmentEntity appointmentEntity) {
-        appointmentMapper.updateById(appointmentEntity);
+    public int updateAppointment(AppointmentEntity appointmentEntity) {
+        return appointmentMapper.updateById(appointmentEntity);
     }
 
     @Override

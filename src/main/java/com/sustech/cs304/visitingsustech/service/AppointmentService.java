@@ -5,15 +5,13 @@ import com.baomidou.mybatisplus.extension.service.IService;
 import com.sustech.cs304.visitingsustech.entity.AppointmentEntity;
 
 public interface AppointmentService extends IService<AppointmentEntity> {
-    public String Validation(AppointmentEntity appointmentEntity);
+    public void validation(AppointmentEntity appointmentEntity);
 
-    public String Validation(Integer id, String openid);
+    public int addAppointment(AppointmentEntity appointmentEntity);
 
-    public void addAppointment(AppointmentEntity appointmentEntity);
+    public int deleteAppointment(Integer id, String openid);
 
-    public void deleteAppointment(Integer id, String openid);
-
-    public void updateAppointment(AppointmentEntity appointmentEntity);
+    public int updateAppointment(AppointmentEntity appointmentEntity);
 
     public AppointmentEntity getAppointment(Integer id, String openid);
 }
