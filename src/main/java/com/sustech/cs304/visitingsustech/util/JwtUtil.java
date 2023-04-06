@@ -4,16 +4,20 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
+import io.jsonwebtoken.security.Keys;
 import lombok.Data;
 import org.springframework.stereotype.Component;
 
+import javax.crypto.SecretKey;
+import javax.crypto.spec.SecretKeySpec;
 import java.util.Date;
 
 @Data
 @Component
 public class JwtUtil {
 
-    private String secret = "2023springCS304";
+    private byte[] keyBytes = Keys.secretKeyFor(SignatureAlgorithm.HS512).getEncoded();
+    private SecretKey secret = new SecretKeySpec(keyBytes, SignatureAlgorithm.HS512.getJcaName());
     private long expire = 604800;
     private String header = "Authorization";
     private final ObjectMapper objectMapper = new ObjectMapper();
@@ -36,7 +40,8 @@ public class JwtUtil {
         try {
             Claims claims = getClaimByToken(token);
             session = claims.getSubject();
-            openid = objectMapper.readTree(session).get("openid").asText();
+            EncryptUtil encryptUtil = new EncryptUtil();
+            openid = objectMapper.readTree(encryptUtil.decrypt(session)).get("openid").asText();
             return openid;
         } catch (Exception e) {
             e.printStackTrace();

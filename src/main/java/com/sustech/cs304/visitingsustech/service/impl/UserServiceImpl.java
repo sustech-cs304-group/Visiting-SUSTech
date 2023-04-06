@@ -24,6 +24,7 @@ public class UserServiceImpl extends ServiceImpl<UserInfoMapper, UserInfoEntity>
     @Override
     public int updateUserInfo(String openid, String nickname, String avatarUrl) {
         UserInfoEntity userInfoEntity = new UserInfoEntity();
+        userInfoEntity.setOpenid(openid);
         userInfoEntity.setNickname(nickname);
         userInfoEntity.setAvatarUrl(avatarUrl);
         return userInfoMapper.updateById(userInfoEntity);
