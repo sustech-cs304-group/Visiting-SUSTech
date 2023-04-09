@@ -6,7 +6,6 @@ import javax.validation.constraints.NotBlank;
 
 @Data
 public class UserInfoVo {
-    private String avatarUrl;
     private String nickname;
     @NotBlank
     private String name;
