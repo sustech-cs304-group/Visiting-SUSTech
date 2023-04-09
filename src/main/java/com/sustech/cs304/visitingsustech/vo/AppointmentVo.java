@@ -9,7 +9,7 @@ import java.sql.Timestamp;
 public class AppointmentVo {
     private String name;
     private Date appointmentDate;
-    private String idcard;
+    private String identityCard;
     private String phone;
     private Integer accompanyingNum;
     private String purpose;

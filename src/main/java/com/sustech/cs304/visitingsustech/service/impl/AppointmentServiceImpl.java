@@ -13,44 +13,44 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
-import java.util.Map;
 
 @Service
 public class AppointmentServiceImpl extends ServiceImpl<AppointmentMapper, AppointmentEntity> implements AppointmentService {
     @Autowired
     private AppointmentMapper appointmentMapper;
+
     @Autowired
     private UserInfoMapper userInfoMapper;
 
-    @Override
-    public void validation(AppointmentEntity appointmentEntity) {
-        QueryWrapper<UserInfoEntity> userIndoWrapper = new QueryWrapper<UserInfoEntity>()
-                .eq("openid", appointmentEntity.getOpenid());
-        List<Map<String, Object>> maps = userInfoMapper.selectMaps(userIndoWrapper);
-        if (maps.size() == 0)
-            throw new AppointmentException("Invalid UserID");
-        if (!IdCardValidator.isValid(appointmentEntity.getIdcard()))
-            throw new AppointmentException("Invalid accompanyingIdentityCard");
-    }
 
     @Override
     public int addAppointment(AppointmentEntity appointmentEntity) {
-        validation(appointmentEntity);
+        UserInfoEntity userInfoEntity = userInfoMapper.selectById(appointmentEntity.getOpenid());
+        if (userInfoEntity == null)
+            throw new AppointmentException("Invalid userID", 400);
+        if (!IdCardValidator.isValid(appointmentEntity.getIdentityCard()))
+            throw new AppointmentException("Invalid accompanyingIdentityCard", 400);
         return appointmentMapper.insert(appointmentEntity);
     }
 
     @Override
-    public int deleteAppointment(Integer id) {
-//        QueryWrapper<AppointmentEntity> appointmentQueryWrapper = new QueryWrapper<AppointmentEntity>()
-//                .eq("id", id);
-//        List<Map<String, Object>> res = appointmentMapper.selectMaps(appointmentQueryWrapper);
-//        if (res.size() == 0)
-//            throw new AppointmentException("Appointment Not Found");
+    public int deleteAppointment(String openid, Integer id) {
+        AppointmentEntity appointmentEntity = appointmentMapper.selectById(id);
+        UserInfoEntity userInfoEntity = userInfoMapper.selectById(openid);
+        if (appointmentEntity == null || userInfoEntity == null)
+            throw new AppointmentException("Invalid appointmentID or userID", 400);
+        if (!(userInfoEntity.getType().equals("admin") || appointmentEntity.getOpenid().equals(openid)))
+            throw new AppointmentException("You are not allowed to delete this appointment", 403);
         return appointmentMapper.deleteById(id);
     }
 
     @Override
-    public int updateAppointment(AppointmentEntity appointmentEntity) {
+    public int updateAppointment(String openid, AppointmentEntity appointmentEntity) {
+        UserInfoEntity userInfoEntity = userInfoMapper.selectById(openid);
+        if (userInfoEntity == null)
+            throw new AppointmentException("Invalid userID", 400);
+        if (!(userInfoEntity.getType().equals("admin") || appointmentEntity.getOpenid().equals(openid)))
+            throw new AppointmentException("You are not allowed to update this appointment", 403);
         return appointmentMapper.updateById(appointmentEntity);
     }
 
@@ -58,14 +58,14 @@ public class AppointmentServiceImpl extends ServiceImpl<AppointmentMapper, Appoi
     public List<AppointmentEntity> getAppointment(String openid) {
         QueryWrapper<UserInfoEntity> userWrapper = new QueryWrapper<UserInfoEntity>()
                 .eq("openid", openid).select("type");
-        List<Map<String, Object>> res = userInfoMapper.selectMaps(userWrapper);
+        UserInfoEntity userInfoEntity = userInfoMapper.selectById(openid);
+        if (userInfoEntity == null)
+            throw new AppointmentException("Invalid userID", 400);
         QueryWrapper<AppointmentEntity> appointWrapper;
-        if (res.get(0).get("type") == "user") {
+        if (userInfoEntity.getType().equals("user"))
             appointWrapper = new QueryWrapper<AppointmentEntity>().eq("openid", openid);
-        } else {
+        else
             appointWrapper = new QueryWrapper<AppointmentEntity>().eq("status", "未审批");
-        }
-//        QueryWrapper<AppointmentEntity> appointWrapper = new QueryWrapper<AppointmentEntity>().eq("openid", openid);
         return appointmentMapper.selectList(appointWrapper);
     }
 }

@@ -16,13 +16,16 @@ import java.util.Date;
 @Component
 public class JwtUtil {
 
-    private byte[] keyBytes = Keys.secretKeyFor(SignatureAlgorithm.HS512).getEncoded();
+    //    private byte[] keyBytes = Keys.secretKeyFor(SignatureAlgorithm.HS512).getEncoded();
+    private byte[] keyBytes = {-75, 16, -112, -27, 81, -57, -109, 7, -8, 117, -106, 57, 103, 75, 102, 56, 80, 93, 40, 86, 38, 86, 36, 63, 114, -75, -95, -79, -19, -17, 120, -42, -89, 70, 75, -22, -15, -77, -23, 119, 77, 29, 112, -115, 14, 8, 17, -43, 52, 91, -100, 82, 48, -32, -49, -51, -28, -3, 93, -14, 121, -19, 104, 56};
+
     private SecretKey secret = new SecretKeySpec(keyBytes, SignatureAlgorithm.HS512.getJcaName());
     private long expire = 604800;
     private String header = "Authorization";
     private final ObjectMapper objectMapper = new ObjectMapper();
 
     public String getToken(String session) {
+        System.out.println(secret);
         Date nowDate = new Date();
         Date expireDate = new Date(nowDate.getTime() + expire * 1000);
         return Jwts.builder()
