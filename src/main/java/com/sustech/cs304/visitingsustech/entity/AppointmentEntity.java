@@ -4,6 +4,7 @@ import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableName;
 import lombok.Data;
 
+import java.sql.Date;
 import java.sql.Timestamp;
 
 @Data
@@ -12,9 +13,11 @@ public class AppointmentEntity {
     @TableId
     private Integer id;
     private String openid;
-    private Timestamp entryTime;
-    private Timestamp departureTime;
+    private String name;
+    private Date appointmentDate;
+    private String idcard;
     private String status;
-    private String accompanyingName;
-    private String accompanyingIdentityCard;
+    private String phone;
+    private Integer accompanyingNum;
+    private String purpose;
 }
