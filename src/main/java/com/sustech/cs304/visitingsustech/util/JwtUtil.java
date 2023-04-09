@@ -25,7 +25,6 @@ public class JwtUtil {
     private final ObjectMapper objectMapper = new ObjectMapper();
 
     public String getToken(String session) {
-        System.out.println(secret);
         Date nowDate = new Date();
         Date expireDate = new Date(nowDate.getTime() + expire * 1000);
         return Jwts.builder()

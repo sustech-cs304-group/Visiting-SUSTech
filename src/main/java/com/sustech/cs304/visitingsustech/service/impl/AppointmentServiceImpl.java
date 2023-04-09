@@ -65,7 +65,7 @@ public class AppointmentServiceImpl extends ServiceImpl<AppointmentMapper, Appoi
         if (userInfoEntity.getType().equals("user"))
             appointWrapper = new QueryWrapper<AppointmentEntity>().eq("openid", openid);
         else
-            appointWrapper = new QueryWrapper<AppointmentEntity>().eq("status", "未审批");
+            appointWrapper = new QueryWrapper<AppointmentEntity>().eq("status", 0);
         return appointmentMapper.selectList(appointWrapper);
     }
 }

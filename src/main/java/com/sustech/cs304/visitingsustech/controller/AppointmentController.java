@@ -88,14 +88,14 @@ public class AppointmentController {
     }
 
     @PostMapping("/justify")
-    public JsonResult<Void> justifyAppointment(HttpServletRequest request, @RequestParam("id") Integer id, @RequestParam("approve") Boolean approve, @RequestParam("comment") String comment) {
+    public JsonResult<Void> justifyAppointment(HttpServletRequest request, @RequestParam("id") Integer id, @RequestParam("approval") Boolean approval, @RequestParam("comment") String comment) {
         String token = request.getHeader("Authorization");
         String openid = jwtUtil.getOpenidFromToken(token);
         UserInfoEntity userInfoEntity = userService.queryUserInfo(openid);
         if (userInfoEntity == null || !userInfoEntity.getType().equals("admin"))
             return JsonResult.error(403, "权限不足");
         UpdateWrapper<AppointmentEntity> updateWrapper = new UpdateWrapper<AppointmentEntity>();
-        if (approve) {
+        if (approval) {
             updateWrapper.eq("id", id).set("status", 1).set("comment", comment);
             appointmentMapper.update(null, updateWrapper);
         } else {

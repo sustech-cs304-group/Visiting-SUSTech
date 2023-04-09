@@ -6,6 +6,7 @@ import javax.validation.constraints.NotBlank;
 
 @Data
 public class UserInfoVo {
+    @NotBlank
     private String nickname;
     @NotBlank
     private String name;
@@ -13,5 +14,6 @@ public class UserInfoVo {
     private String phone;
     @NotBlank
     private String identityCard;
+    @NotBlank
     private Integer gender;
 }

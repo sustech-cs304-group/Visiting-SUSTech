@@ -7,6 +7,7 @@ import java.sql.Timestamp;
 
 @Data
 public class AppointmentVo {
+    private Integer id;
     private String name;
     private Date appointmentDate;
     private String identityCard;
