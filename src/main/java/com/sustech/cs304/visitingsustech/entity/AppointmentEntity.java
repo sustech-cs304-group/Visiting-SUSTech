@@ -15,9 +15,10 @@ public class AppointmentEntity {
     private String openid;
     private String name;
     private Date appointmentDate;
-    private String idcard;
-    private String status;
+    private String identityCard;
+    private Integer status;
     private String phone;
     private Integer accompanyingNum;
     private String purpose;
+    private String comment;
 }

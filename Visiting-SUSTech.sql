@@ -8,18 +8,19 @@ create table user_info(
                           name text,
                           phone varchar(11),
                           identity_card varchar(18),
-                          gender int,
+                          gender integer,
                           type char(10)
 );
 
 create table appointment(
                             id serial primary key,
                             openid text references user_info(openid),
-                            idcard varchar(18),
+                            identity_card varchar(18),
                             name text,
                             appointment_date date,
                             phone varchar(11),
-                            status varchar(10) not null,
+                            status integer not null,
                             accompanying_num int,
-                            purpose text
+                            purpose text,
+                            comment text
 );
