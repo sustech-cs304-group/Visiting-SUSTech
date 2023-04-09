@@ -52,26 +52,10 @@ public class UserServiceImpl extends ServiceImpl<UserInfoMapper, UserInfoEntity>
     }
 
     @Override
-    public int updateAvatar(String openid, MultipartFile avatar, String baseUrl) {
+    public int updateAvatar(String openid, String url) {
         UserInfoEntity userInfoEntity = new UserInfoEntity();
         userInfoEntity.setOpenid(openid);
-        File fir = new File(path);
-        if (!fir.exists()) {
-            fir.mkdirs();
-        }
-        if (avatar != null) {
-            String suffix = Objects.requireNonNull(avatar.getOriginalFilename()).substring(avatar.getOriginalFilename().lastIndexOf("."));
-            String newFileName = UUID.randomUUID().toString().replaceAll("-", "") + suffix;
-//            String newFileName = openid + suffix;
-            try {
-                File file = new File(path + newFileName);
-                avatar.transferTo(file);
-                String url = baseUrl + newFileName;
-                userInfoEntity.setAvatarUrl(url);
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-        }
+        userInfoEntity.setAvatarUrl(url);
         return userInfoMapper.updateById(userInfoEntity);
     }
 }
