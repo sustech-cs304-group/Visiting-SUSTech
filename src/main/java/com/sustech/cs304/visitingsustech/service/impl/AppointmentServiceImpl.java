@@ -55,16 +55,16 @@ public class AppointmentServiceImpl extends ServiceImpl<AppointmentMapper, Appoi
 
     @Override
     public List<AppointmentEntity> getAppointment(String openid) {
-//        QueryWrapper<UserInfoEntity> userWrapper = new QueryWrapper<UserInfoEntity>()
-//                .eq("openid", openid).select("type");
-//        List<Map<String, Object>> res = userInfoMapper.selectMaps(userWrapper);
-//        QueryWrapper<AppointmentEntity> appointWrapper;
-//        if (res.get(0).get("type") == "user") {
-//            appointWrapper = new QueryWrapper<AppointmentEntity>().eq("openid", openid);
-//        } else {
-//            appointWrapper = new QueryWrapper<AppointmentEntity>().eq("status", "未审批");
-//        }
-        QueryWrapper<AppointmentEntity> appointWrapper = new QueryWrapper<AppointmentEntity>().eq("openid", openid);
+        QueryWrapper<UserInfoEntity> userWrapper = new QueryWrapper<UserInfoEntity>()
+                .eq("openid", openid).select("type");
+        List<Map<String, Object>> res = userInfoMapper.selectMaps(userWrapper);
+        QueryWrapper<AppointmentEntity> appointWrapper;
+        if (res.get(0).get("type") == "user") {
+            appointWrapper = new QueryWrapper<AppointmentEntity>().eq("openid", openid);
+        } else {
+            appointWrapper = new QueryWrapper<AppointmentEntity>().eq("status", "未审批");
+        }
+//        QueryWrapper<AppointmentEntity> appointWrapper = new QueryWrapper<AppointmentEntity>().eq("openid", openid);
         return appointmentMapper.selectList(appointWrapper);
     }
 }
