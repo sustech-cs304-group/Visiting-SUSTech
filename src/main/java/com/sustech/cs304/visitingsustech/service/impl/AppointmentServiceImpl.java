@@ -8,6 +8,7 @@ import com.sustech.cs304.visitingsustech.exception.AppointmentException;
 import com.sustech.cs304.visitingsustech.mapper.AppointmentMapper;
 import com.sustech.cs304.visitingsustech.mapper.UserInfoMapper;
 import com.sustech.cs304.visitingsustech.service.AppointmentService;
+import com.sustech.cs304.visitingsustech.util.IdCardValidator;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -28,7 +29,7 @@ public class AppointmentServiceImpl extends ServiceImpl<AppointmentMapper, Appoi
         List<Map<String, Object>> maps = userInfoMapper.selectMaps(userIndoWrapper);
         if (maps.size() == 0)
             throw new AppointmentException("Invalid UserID");
-        if (appointmentEntity.getIdcard().length() != 18)
+        if (!IdCardValidator.isValid(appointmentEntity.getIdcard()))
             throw new AppointmentException("Invalid accompanyingIdentityCard");
     }
 

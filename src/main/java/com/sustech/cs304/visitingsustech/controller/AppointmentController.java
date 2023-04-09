@@ -14,6 +14,7 @@ import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.util.Comparator;
 import java.util.List;
@@ -40,15 +41,15 @@ public class AppointmentController {
         String openid = jwtUtil.getOpenidFromToken(token);
         AppointmentEntity appointmentEntity = new AppointmentEntity();
         BeanUtils.copyProperties(appointmentVo, appointmentEntity);
-        QueryWrapper<AppointmentEntity> appointmentQueryWrapper = new QueryWrapper<AppointmentEntity>()
-                .isNotNull("openid");
-        List<Map<String, Object>> res = appointmentMapper.selectMaps(appointmentQueryWrapper);
-        if (res.size() == 0){
-            appointmentEntity.setId(1);
-        }
-        else {
-            appointmentEntity.setId(Integer.parseInt(String.valueOf(res.get(res.size() - 1).get("id"))) + 1);
-        }
+//        QueryWrapper<AppointmentEntity> appointmentQueryWrapper = new QueryWrapper<AppointmentEntity>()
+//                .isNotNull("openid");
+//        List<Map<String, Object>> res = appointmentMapper.selectMaps(appointmentQueryWrapper);
+//        if (res.size() == 0){
+//            appointmentEntity.setId(1);
+//        }
+//        else {
+//            appointmentEntity.setId(Integer.parseInt(String.valueOf(res.get(res.size() - 1).get("id"))) + 1);
+//        }
         appointmentEntity.setOpenid(openid);
         appointmentEntity.setStatus("未审批");
         try {
@@ -108,11 +109,9 @@ public class AppointmentController {
     }
 
     @PostMapping("/justify")
-    public JsonResult<Void> justifyAppointment(@RequestBody String in,
-                                               HttpServletRequest request) {
-        System.out.println(in);
-        String isApproval = in.split("&")[0].split("=")[1];
-        int id = Integer.parseInt(in.split("&")[1].split("=")[1]);
+    public JsonResult<Void> justifyAppointment(HttpServletRequest request) {
+        String isApproval = request.getParameter("isApproval");
+        int id = Integer.parseInt(request.getParameter("id"));
         if (Objects.equals(isApproval, "true")){
             UpdateWrapper<AppointmentEntity> updateWrapper = new UpdateWrapper<AppointmentEntity>();
             updateWrapper.set("status", "审批通过").eq("id", id);
