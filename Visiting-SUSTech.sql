@@ -15,9 +15,11 @@ create table user_info(
 create table appointment(
                             id serial primary key,
                             openid text references user_info(openid),
-                            entry_time timestamp not null,
-                            departure_time timestamp not null,
+                            idcard varchar(18),
+                            name text,
+                            appointment_date date,
+                            phone varchar(11),
                             status varchar(10) not null,
-                            accompanying_name text,
-                            accompanying_identity_card varchar(18)
+                            accompanying_num int,
+                            purpose text
 );
