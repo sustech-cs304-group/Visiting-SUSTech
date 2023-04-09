@@ -9,7 +9,6 @@ import com.sustech.cs304.visitingsustech.service.UserService;
 import com.sustech.cs304.visitingsustech.util.EncryptUtil;
 import com.sustech.cs304.visitingsustech.util.JwtUtil;
 import com.sustech.cs304.visitingsustech.util.UserInfoUtil;
-import jakarta.servlet.http.HttpServletRequest;
 import jakarta.validation.constraints.NotBlank;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -66,17 +65,5 @@ public class WxLoginController {
             }
         }
         return JsonResult.error("授权失败：" + jsonResult.get("errmsg").asText());
-    }
-
-    @PostMapping("/index/user-info")
-    public JsonResult<Void> insertUserInfo(@RequestParam("nickname") String nickname,
-                                           @RequestParam("avatarUrl") String avatarUrl,
-                                           HttpServletRequest request) {
-        String token = request.getHeader("Authorization");
-        String openid = jwtUtil.getOpenidFromToken(token);
-        int result = userService.updateUserInfo(openid, nickname, avatarUrl);
-        if (result <= 0)
-            return JsonResult.error("更新用户信息失败");
-        return JsonResult.success("更新用户信息成功");
     }
 }
