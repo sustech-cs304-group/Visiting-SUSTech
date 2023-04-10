@@ -12,6 +12,7 @@ import com.sustech.cs304.visitingsustech.util.IdCardValidator;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.sql.Timestamp;
 import java.util.List;
 
 @Service
@@ -32,6 +33,7 @@ public class AppointmentServiceImpl extends ServiceImpl<AppointmentMapper, Appoi
             throw new AppointmentException("Invalid identityCard", 400);
         if (!appointmentEntity.getPhone().matches("^1[3-9]\\d{9}$"))
             throw new AppointmentException("Invalid phone number", 400);
+        appointmentEntity.setCreateTime(new Timestamp(System.currentTimeMillis()));
         return appointmentMapper.insert(appointmentEntity);
     }
 
@@ -67,9 +69,9 @@ public class AppointmentServiceImpl extends ServiceImpl<AppointmentMapper, Appoi
             throw new AppointmentException("Invalid userID", 400);
         QueryWrapper<AppointmentEntity> appointWrapper;
         if (userInfoEntity.getType().equals("user"))
-            appointWrapper = new QueryWrapper<AppointmentEntity>().eq("openid", openid);
+            appointWrapper = new QueryWrapper<AppointmentEntity>().eq("openid", openid).orderByDesc("appointment_date");
         else
-            appointWrapper = new QueryWrapper<AppointmentEntity>().eq("status", 0);
+            appointWrapper = new QueryWrapper<AppointmentEntity>().eq("status", 0).orderByDesc("create_time");
         return appointmentMapper.selectList(appointWrapper);
     }
 }

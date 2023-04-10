@@ -5,6 +5,7 @@ import com.baomidou.mybatisplus.annotation.TableName;
 import lombok.Data;
 
 import java.sql.Date;
+import java.sql.Timestamp;
 
 @Data
 @TableName("appointment")
@@ -20,4 +21,5 @@ public class AppointmentEntity {
     private Integer accompanyingNum;
     private String purpose;
     private String comment;
+    private Timestamp createTime;
 }
