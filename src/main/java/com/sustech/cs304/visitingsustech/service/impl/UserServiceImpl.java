@@ -29,6 +29,7 @@ public class UserServiceImpl extends ServiceImpl<UserInfoMapper, UserInfoEntity>
     @Override
     public int insertUser(String openid) {
         UserInfoEntity userInfoEntity = new UserInfoEntity();
+        userInfoEntity.setType("user");
         userInfoEntity.setOpenid(openid);
         return userInfoMapper.insert(userInfoEntity);
     }
@@ -42,7 +43,6 @@ public class UserServiceImpl extends ServiceImpl<UserInfoMapper, UserInfoEntity>
         UserInfoEntity userInfoEntity = new UserInfoEntity();
         BeanUtils.copyProperties(userInfoVo, userInfoEntity);
         userInfoEntity.setOpenid(openid);
-        userInfoEntity.setType("user");
         return userInfoMapper.updateById(userInfoEntity);
     }
 
