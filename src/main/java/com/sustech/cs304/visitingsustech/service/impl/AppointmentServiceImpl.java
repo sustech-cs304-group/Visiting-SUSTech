@@ -29,7 +29,9 @@ public class AppointmentServiceImpl extends ServiceImpl<AppointmentMapper, Appoi
         if (userInfoEntity == null)
             throw new AppointmentException("Invalid userID", 400);
         if (!IdCardValidator.isValid(appointmentEntity.getIdentityCard()))
-            throw new AppointmentException("Invalid accompanyingIdentityCard", 400);
+            throw new AppointmentException("Invalid identityCard", 400);
+        if (!appointmentEntity.getPhone().matches("^1[3-9]\\d{9}$"))
+            throw new AppointmentException("Invalid phone number", 400);
         return appointmentMapper.insert(appointmentEntity);
     }
 
@@ -49,6 +51,10 @@ public class AppointmentServiceImpl extends ServiceImpl<AppointmentMapper, Appoi
         UserInfoEntity userInfoEntity = userInfoMapper.selectById(openid);
         if (userInfoEntity == null)
             throw new AppointmentException("Invalid userID", 400);
+        if (appointmentEntity.getIdentityCard() != null && !IdCardValidator.isValid(appointmentEntity.getIdentityCard()))
+            throw new AppointmentException("Invalid identityCard", 400);
+        if (appointmentEntity.getPhone() != null && !appointmentEntity.getPhone().matches("^1[3-9]\\d{9}$"))
+            throw new AppointmentException("Invalid phone number", 400);
         if (!(userInfoEntity.getType().equals("admin") || appointmentEntity.getOpenid().equals(openid)))
             throw new AppointmentException("You are not allowed to update this appointment", 403);
         return appointmentMapper.updateById(appointmentEntity);
@@ -56,8 +62,6 @@ public class AppointmentServiceImpl extends ServiceImpl<AppointmentMapper, Appoi
 
     @Override
     public List<AppointmentEntity> getAppointment(String openid) {
-        QueryWrapper<UserInfoEntity> userWrapper = new QueryWrapper<UserInfoEntity>()
-                .eq("openid", openid).select("type");
         UserInfoEntity userInfoEntity = userInfoMapper.selectById(openid);
         if (userInfoEntity == null)
             throw new AppointmentException("Invalid userID", 400);
