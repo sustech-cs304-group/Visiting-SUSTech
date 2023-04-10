@@ -9,7 +9,7 @@ create table user_info(
                           phone varchar(11),
                           identity_card varchar(18),
                           gender integer,
-                          type char(10)
+                          type varchar(10)
 );
 
 create table appointment(
