@@ -15,31 +15,29 @@ import org.springframework.web.servlet.HandlerInterceptor;
 public class JwtInterceptor implements HandlerInterceptor {
 
     @Autowired
-    JwtUtil jwtUtil;
+    private JwtUtil jwtUtil;
 
     @Override
-    public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler){
+    public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) {
         String token = request.getHeader("Authorization");
-
-        try{
+        try {
             jwtUtil.verifyToken(token);
             return true;
-        }catch (ExpiredJwtException e){
+        } catch (ExpiredJwtException e) {
             e.printStackTrace();
             throw new TokenException("token过期！");
-        }catch (MalformedJwtException e){
+        } catch (MalformedJwtException e) {
             e.printStackTrace();
             throw new TokenException("token格式错误！");
-        }catch (SignatureException e){
+        } catch (SignatureException e) {
             e.printStackTrace();
             throw new TokenException("无效签名！");
-        }catch (IllegalArgumentException e){
+        } catch (IllegalArgumentException e) {
             e.printStackTrace();
             throw new TokenException("非法请求！");
-        }catch (Exception e){
+        } catch (Exception e) {
             e.printStackTrace();
             throw new TokenException("token无效！");
         }
     }
-
 }
