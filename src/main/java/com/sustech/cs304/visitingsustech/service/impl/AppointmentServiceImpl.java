@@ -12,6 +12,7 @@ import com.sustech.cs304.visitingsustech.util.IdCardValidator;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.sql.Timestamp;
 import java.util.List;
 
 @Service
@@ -29,7 +30,10 @@ public class AppointmentServiceImpl extends ServiceImpl<AppointmentMapper, Appoi
         if (userInfoEntity == null)
             throw new AppointmentException("Invalid userID", 400);
         if (!IdCardValidator.isValid(appointmentEntity.getIdentityCard()))
-            throw new AppointmentException("Invalid accompanyingIdentityCard", 400);
+            throw new AppointmentException("Invalid identityCard", 400);
+        if (!appointmentEntity.getPhone().matches("^1[3-9]\\d{9}$"))
+            throw new AppointmentException("Invalid phone number", 400);
+        appointmentEntity.setCreateTime(new Timestamp(System.currentTimeMillis()));
         return appointmentMapper.insert(appointmentEntity);
     }
 
@@ -49,6 +53,10 @@ public class AppointmentServiceImpl extends ServiceImpl<AppointmentMapper, Appoi
         UserInfoEntity userInfoEntity = userInfoMapper.selectById(openid);
         if (userInfoEntity == null)
             throw new AppointmentException("Invalid userID", 400);
+        if (appointmentEntity.getIdentityCard() != null && !IdCardValidator.isValid(appointmentEntity.getIdentityCard()))
+            throw new AppointmentException("Invalid identityCard", 400);
+        if (appointmentEntity.getPhone() != null && !appointmentEntity.getPhone().matches("^1[3-9]\\d{9}$"))
+            throw new AppointmentException("Invalid phone number", 400);
         if (!(userInfoEntity.getType().equals("admin") || appointmentEntity.getOpenid().equals(openid)))
             throw new AppointmentException("You are not allowed to update this appointment", 403);
         return appointmentMapper.updateById(appointmentEntity);
@@ -56,16 +64,14 @@ public class AppointmentServiceImpl extends ServiceImpl<AppointmentMapper, Appoi
 
     @Override
     public List<AppointmentEntity> getAppointment(String openid) {
-        QueryWrapper<UserInfoEntity> userWrapper = new QueryWrapper<UserInfoEntity>()
-                .eq("openid", openid).select("type");
         UserInfoEntity userInfoEntity = userInfoMapper.selectById(openid);
         if (userInfoEntity == null)
             throw new AppointmentException("Invalid userID", 400);
         QueryWrapper<AppointmentEntity> appointWrapper;
         if (userInfoEntity.getType().equals("user"))
-            appointWrapper = new QueryWrapper<AppointmentEntity>().eq("openid", openid);
+            appointWrapper = new QueryWrapper<AppointmentEntity>().eq("openid", openid).orderByDesc("appointment_date");
         else
-            appointWrapper = new QueryWrapper<AppointmentEntity>().eq("status", 0);
+            appointWrapper = new QueryWrapper<AppointmentEntity>().eq("status", 0).orderByDesc("create_time");
         return appointmentMapper.selectList(appointWrapper);
     }
 }
