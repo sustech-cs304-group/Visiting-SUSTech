@@ -32,6 +32,6 @@ create table news(
                      title varchar(100) not null,
                      content text not null,
                      picture_url text,
-                     created_time timestamp default current_timestamp,
+                     create_time timestamp default current_timestamp,
                      update_time timestamp default current_timestamp
 );
