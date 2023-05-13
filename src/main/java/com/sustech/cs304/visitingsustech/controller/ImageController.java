@@ -13,6 +13,8 @@ import java.io.IOException;
 import java.util.Objects;
 import java.util.UUID;
 
+@RestController
+@RequestMapping("/image")
 public class ImageController {
     @Value("${spring.servlet.multipart.location}")
     private String path;
