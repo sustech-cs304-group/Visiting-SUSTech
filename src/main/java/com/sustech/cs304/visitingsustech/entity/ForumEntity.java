@@ -6,6 +6,11 @@ import lombok.Data;
 
 import java.sql.Timestamp;
 
+/**
+ * Stores basic forum info.
+ *
+ * @author pound
+ */
 @Data
 @TableName("forum")
 public class ForumEntity {

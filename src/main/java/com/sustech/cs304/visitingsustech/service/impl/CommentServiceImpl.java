@@ -11,7 +11,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.sql.Timestamp;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 @Service
 public class CommentServiceImpl extends ServiceImpl<CommentMapper, CommentEntity> implements CommentService {
@@ -56,5 +58,20 @@ public class CommentServiceImpl extends ServiceImpl<CommentMapper, CommentEntity
         QueryWrapper<CommentEntity> commentWrapper;
         commentWrapper = new QueryWrapper<CommentEntity>().eq("forum_id", forumId);
         return commentMapper.selectList(commentWrapper);
+    }
+
+    @Override
+    public Map<String, String> getNameComment(Integer forumId) {
+        ForumEntity forumEntity = forumMapper.selectById(forumId);
+        if (forumEntity == null)
+            throw new AppointmentException("Invalid forumID", 400);
+        QueryWrapper<CommentEntity> commentWrapper;
+        commentWrapper = new QueryWrapper<CommentEntity>().eq("forum_id", forumId);
+        Map<String, String> map = new HashMap<>();
+        List<CommentEntity> commentEntities = commentMapper.selectList(commentWrapper);
+        for (CommentEntity commentEntity : commentEntities) {
+            map.put(commentEntity.getNickname(), commentEntity.getContent());
+        }
+        return map;
     }
 }

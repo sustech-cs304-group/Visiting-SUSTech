@@ -50,7 +50,13 @@ public class ForumServiceImpl extends ServiceImpl<ForumMapper, ForumEntity> impl
     }
 
     @Override
-    public List<ForumEntity> getForum(String openid) {
+    public List<ForumEntity> getForum() {
+        QueryWrapper<ForumEntity> forumWrapper = new QueryWrapper<ForumEntity>().orderByDesc("create_date");
+        return forumMapper.selectList(forumWrapper);
+    }
+
+    @Override
+    public List<ForumEntity> getForumById(String openid) {
         UserInfoEntity userInfoEntity = userInfoMapper.selectById(openid);
         if (userInfoEntity == null)
             throw new AppointmentException("Invalid userID", 400);

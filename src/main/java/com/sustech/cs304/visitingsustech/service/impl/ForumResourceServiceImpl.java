@@ -17,8 +17,10 @@ import com.sustech.cs304.visitingsustech.service.ForumService;
 import com.sustech.cs304.visitingsustech.util.IdCardValidator;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.sql.Timestamp;
+import java.util.ArrayList;
 import java.util.List;
 
 @Service
@@ -64,5 +66,19 @@ public class ForumResourceServiceImpl extends ServiceImpl<ForumResourceMapper, F
         QueryWrapper<ForumResourceEntity> forumResourceWrapper;
         forumResourceWrapper = new QueryWrapper<ForumResourceEntity>().eq("forum_id", forumId);
         return forumResourceMapper.selectList(forumResourceWrapper);
+    }
+
+    @Override
+    public List<String> getFiles(Integer forumId) {
+        ForumEntity forumEntity = forumMapper.selectById(forumId);
+        if (forumEntity == null)
+            throw new AppointmentException("Invalid forumID", 400);
+        QueryWrapper<ForumResourceEntity> queryWrapper = new QueryWrapper<ForumResourceEntity>().eq("forum_id", forumId);
+        List<String> files = new ArrayList<>();
+        List<ForumResourceEntity> forumResourceEntities = forumResourceMapper.selectList(queryWrapper);
+        for (ForumResourceEntity forumResourceEntity : forumResourceEntities) {
+            files.add(forumResourceEntity.getResource());
+        }
+        return files;
     }
 }
