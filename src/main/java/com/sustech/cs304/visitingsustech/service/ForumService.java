@@ -13,5 +13,7 @@ public interface ForumService extends IService<ForumEntity> {
 
     public int deleteForum(String openid, Integer id);
 
-    public List<ForumEntity> getForum(String openid);
+    public List<ForumEntity> getForum();
+
+    public List<ForumEntity> getForumById(String openid);
 }

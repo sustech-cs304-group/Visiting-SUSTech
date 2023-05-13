@@ -6,6 +6,7 @@ import com.sustech.cs304.visitingsustech.entity.ForumEntity;
 import com.sustech.cs304.visitingsustech.entity.ForumResourceEntity;
 import com.sustech.cs304.visitingsustech.entity.UserInfoEntity;
 import com.sustech.cs304.visitingsustech.vo.UserInfoVo;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
 
@@ -15,4 +16,6 @@ public interface ForumResourceService extends IService<ForumResourceEntity> {
     public int deleteForumResource(String openid, Integer id);
 
     public List<ForumResourceEntity> getForumResource(Integer forumId);
+
+    public List<String> getFiles(Integer forumId);
 }

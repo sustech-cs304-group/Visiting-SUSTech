@@ -27,6 +27,11 @@ import java.util.Map;
 import java.util.Objects;
 import java.util.UUID;
 
+/**
+ * For comment operations.
+ *
+ * @author pound
+ */
 @RestController
 @RequestMapping("/comment")
 public class CommentController {
@@ -40,9 +45,13 @@ public class CommentController {
     private CommentService commentService;
     @Autowired
     private JwtUtil jwtUtil;
-    @Value("${spring.servlet.multipart.location}")
-    private String path;
-
+    /**
+     * Add a comment.
+     *
+     * @param commentVo Comment info to add
+     * @param request Http request
+     * @return Message of success or fail
+     */
     @PostMapping("/add")
     public JsonResult<String> addComment(@RequestBody CommentVo commentVo,
                                        HttpServletRequest request) {
@@ -51,6 +60,7 @@ public class CommentController {
         CommentEntity commentEntity = new CommentEntity();
         BeanUtils.copyProperties(commentVo, commentEntity);
         commentEntity.setOpenid(openid);
+        commentEntity.setNickname(userService.queryUserInfo(openid).getNickname());
         try {
             if (commentService.addComment(commentEntity) > 0)
                 return JsonResult.success("success");
@@ -61,6 +71,13 @@ public class CommentController {
         }
     }
 
+    /**
+     * Delete a comment.
+     *
+     * @param id Comment id to delete
+     * @param request Http request
+     * @return Message of success or fail
+     */
     @PostMapping("/delete")
     public JsonResult<Void> deleteComment(@RequestParam("id") Integer id,
                                               HttpServletRequest request) {
@@ -76,6 +93,13 @@ public class CommentController {
         }
     }
 
+    /**
+     * Query all comments of a forum.
+     *
+     * @param request Http request
+     * @param forumId Forum id for querying
+     * @return All the comments of required forum.
+     */
     @GetMapping("/query")
     public JsonResult<List<CommentEntity>> getComment(HttpServletRequest request, Integer forumId) {
         String token = request.getHeader("Authorization");

@@ -27,6 +27,11 @@ import java.util.Map;
 import java.util.Objects;
 import java.util.UUID;
 
+/**
+ * For forumLike operations.
+ *
+ * @author pound
+ */
 @RestController
 @RequestMapping("/forumlike")
 public class ForumLikeController {
@@ -41,6 +46,13 @@ public class ForumLikeController {
     @Autowired
     private JwtUtil jwtUtil;
 
+    /**
+     * Add a like to a forum.
+     *
+     * @param forumId Forum id for specifying
+     * @param request Http request
+     * @return Message of success or fail
+     */
     @PostMapping("/add")
     public JsonResult<String> addForumLike(@RequestBody Integer forumId,
                                          HttpServletRequest request) {
@@ -48,6 +60,7 @@ public class ForumLikeController {
         String openid = jwtUtil.getOpenidFromToken(token);
         ForumLikeEntity forumLikeEntity = new ForumLikeEntity();
         forumLikeEntity.setOpenid(openid);
+        forumLikeEntity.setNickname(userService.queryUserInfo(openid).getNickname());
         forumLikeEntity.setForumId(forumId);
         try {
             if (forumLikeService.addForumLike(forumLikeEntity) > 0)
@@ -59,6 +72,13 @@ public class ForumLikeController {
         }
     }
 
+    /**
+     * Delete a like to a forum.
+     *
+     * @param id ForumLike id to delete
+     * @param request Http request
+     * @return Message of success or fail
+     */
     @PostMapping("/delete")
     public JsonResult<Void> deleteForumLike(@RequestParam("id") Integer id,
                                           HttpServletRequest request) {
@@ -74,6 +94,13 @@ public class ForumLikeController {
         }
     }
 
+    /**
+     * Query all likes of a forum.
+     *
+     * @param request Http request
+     * @param forumId Forum id for querying
+     * @return All the likes of required forum.
+     */
     @GetMapping("/query")
     public JsonResult<List<ForumLikeEntity>> getForumLike(HttpServletRequest request, Integer forumId) {
         String token = request.getHeader("Authorization");

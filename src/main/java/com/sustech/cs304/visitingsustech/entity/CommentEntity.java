@@ -7,13 +7,18 @@ import lombok.Data;
 import java.sql.Date;
 import java.sql.Timestamp;
 
+/**
+ * Stores comment info.
+ *
+ * @author pound
+ */
 @Data
 @TableName("comment")
 public class CommentEntity {
     @TableId
     private Integer id;
     private String openid;
+    private String nickname;
     private Integer forumId;
-    private String replyTo;
     private String content;
 }

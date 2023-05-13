@@ -12,4 +12,6 @@ public interface ForumLikeService extends IService<ForumLikeEntity> {
     public int deleteForumLike(String openid, Integer id);
 
     public List<ForumLikeEntity> getForumLike(Integer forumId);
+
+    public List<String> getLikeNames(Integer forumId);
 }

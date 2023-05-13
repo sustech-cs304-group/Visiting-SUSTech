@@ -26,6 +26,11 @@ import java.util.Map;
 import java.util.Objects;
 import java.util.UUID;
 
+/**
+ * For forumResource operations.
+ *
+ * @author pound
+ */
 @RestController
 @RequestMapping("/forumresource")
 public class ForumResourceController {
@@ -46,6 +51,13 @@ public class ForumResourceController {
     @Value("${spring.servlet.multipart.location}")
     private String path;
 
+    /**
+     * Add a forum resources to a forum.
+     *
+     * @param forumId Like for which forum
+     * @param request Http request
+     * @return Message of success or fail
+     */
     @PostMapping("/add")
     public JsonResult<String> addForumResource(HttpServletRequest request, List<MultipartFile> multipartFiles,
                                                Integer forumId){
@@ -72,6 +84,13 @@ public class ForumResourceController {
         return JsonResult.success(200, "添加成功", url);
     }
 
+    /**
+     * Delete a forum resource.
+     *
+     * @param id Id to delete
+     * @param request Http request
+     * @return Message of success or fail
+     */
     @PostMapping("/delete")
     public JsonResult<Void> deleteForumResource(@RequestParam("id") Integer id,
                                         HttpServletRequest request) {
@@ -87,16 +106,16 @@ public class ForumResourceController {
         }
     }
 
-    @GetMapping("/query")
-    public JsonResult<List<ForumResourceEntity>> getForumResource(HttpServletRequest request, Integer forumId) {
-        String token = request.getHeader("Authorization");
-        String openid = jwtUtil.getOpenidFromToken(token);
-//        List<ForumEntity> forumEntities = forumService.getForum(openid);
-//        for (ForumEntity forumEntity : forumEntities) {
-//            List<ForumResourceEntity> forumResourceEntities = forumResourceService.getForumResource(forumEntity.getId());
-//            List<CommentEntity> commentEntities = commentService.getComment(forumEntity.getId());
-//            List<ForumLikeEntity> forumLikeEntities = forumLikeService.getForumLike(forumEntity.getId());
-//        }
-        return JsonResult.success(forumResourceService.getForumResource(forumId));
-    }
+//    @GetMapping("/query")
+//    public JsonResult<List<ForumResourceEntity>> getForumResource(HttpServletRequest request, Integer forumId) {
+//        String token = request.getHeader("Authorization");
+//        String openid = jwtUtil.getOpenidFromToken(token);
+////        List<ForumEntity> forumEntities = forumService.getForum(openid);
+////        for (ForumEntity forumEntity : forumEntities) {
+////            List<ForumResourceEntity> forumResourceEntities = forumResourceService.getForumResource(forumEntity.getId());
+////            List<CommentEntity> commentEntities = commentService.getComment(forumEntity.getId());
+////            List<ForumLikeEntity> forumLikeEntities = forumLikeService.getForumLike(forumEntity.getId());
+////        }
+//        return JsonResult.success(forumResourceService.getForumResource(forumId));
+//    }
 }

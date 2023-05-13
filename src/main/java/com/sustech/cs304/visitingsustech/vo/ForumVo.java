@@ -9,7 +9,6 @@ import java.util.List;
 
 @Data
 public class ForumVo {
-    private Integer id;
     private String content;
     private String location;
     private Timestamp createDate;

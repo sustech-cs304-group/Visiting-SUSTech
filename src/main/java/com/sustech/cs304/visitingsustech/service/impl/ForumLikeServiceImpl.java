@@ -13,6 +13,7 @@ import com.sustech.cs304.visitingsustech.service.ForumResourceService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Service
@@ -58,5 +59,20 @@ public class ForumLikeServiceImpl extends ServiceImpl<ForumLikeMapper, ForumLike
         QueryWrapper<ForumLikeEntity> forumLikeWrapper;
         forumLikeWrapper = new QueryWrapper<ForumLikeEntity>().eq("forum_id", forumId);
         return forumLikeMapper.selectList(forumLikeWrapper);
+    }
+
+    @Override
+    public List<String> getLikeNames(Integer forumId) {
+        ForumEntity forumEntity = forumMapper.selectById(forumId);
+        if (forumEntity == null)
+            throw new AppointmentException("Invalid forumID", 400);
+        QueryWrapper<ForumLikeEntity> forumLikeWrapper;
+        forumLikeWrapper = new QueryWrapper<ForumLikeEntity>().eq("forum_id", forumId);
+        List<ForumLikeEntity> forumLikeEntities = forumLikeMapper.selectList(forumLikeWrapper);
+        List<String> names = new ArrayList<>();
+        for (ForumLikeEntity forumLikeEntity : forumLikeEntities) {
+            names.add(forumLikeEntity.getNickname());
+        }
+        return names;
     }
 }
