@@ -7,6 +7,6 @@ import java.sql.Timestamp;
 
 @Data
 public class CommentVo {
-    private String forumId;
+    private Integer forumId;
     private String content;
 }

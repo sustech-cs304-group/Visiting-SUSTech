@@ -54,7 +54,7 @@ public class ForumLikeController {
      * @return Message of success or fail
      */
     @PostMapping("/add")
-    public JsonResult<String> addForumLike(@RequestBody Integer forumId,
+    public JsonResult<String> addForumLike(@RequestParam("forumId") Integer forumId,
                                          HttpServletRequest request) {
         String token = request.getHeader("Authorization");
         String openid = jwtUtil.getOpenidFromToken(token);

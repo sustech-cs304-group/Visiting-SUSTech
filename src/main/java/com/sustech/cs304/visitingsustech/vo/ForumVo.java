@@ -6,11 +6,11 @@ import org.springframework.web.multipart.MultipartFile;
 import java.sql.Date;
 import java.sql.Timestamp;
 import java.util.List;
+import java.util.Map;
 
 @Data
 public class ForumVo {
     private String content;
     private String location;
-    private Timestamp createDate;
-    private List<MultipartFile> imgOrRadio;
+    private List<Map<String,String>> imgOrRadio;
 }

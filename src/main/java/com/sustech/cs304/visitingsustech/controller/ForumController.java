@@ -65,51 +65,24 @@ public class ForumController {
         forumEntity.setOpenid(openid);
         forumEntity.setLocation(forumVo.getLocation());
         forumEntity.setContent(forumVo.getContent());
-        forumEntity.setCreateDate(forumVo.getCreateDate());
+        Timestamp timestamp = new Timestamp(System.currentTimeMillis());
+        forumEntity.setCreateDate(timestamp);
         try {
             if (forumService.addForum(forumEntity) > 0) {
                 QueryWrapper<ForumEntity> queryWrapper = new QueryWrapper<>();
-                queryWrapper.eq("openid", openid).eq("create_date", forumVo.getCreateDate()).select("id");
+                queryWrapper.eq("openid", openid).eq("create_date", timestamp).select("id");
                 ForumEntity tmp = forumMapper.selectOne(queryWrapper);
-                String url = request.getScheme() + "://" + request.getServerName() + ":" + request.getServerPort() + "/images/";
-                int res = addResource(forumVo.getImgOrRadio(), tmp.getId(), url).getCode();
-                if (res == 200)
-                    return JsonResult.success("success");
+                for (Map item: forumVo.getImgOrRadio()) {
+                    String url = (String) item.get("url");
+                    if (forumResourceService.addForumResource(tmp.getId(), url) <= 0)
+                        return JsonResult.error("添加失败");
+                }
+                return JsonResult.success("success");
             }
             return JsonResult.error("添加失败");
         } catch (BaseException e) {
             return JsonResult.error(e.getStatus(), e.getMessage());
         }
-    }
-
-    /**
-     * For resource add.
-     *
-     * @param multipartFiles Files info to add
-     * @param forumId Id of forum to add
-     * @param url Url for saving
-     * @return Message of success or fail
-     */
-    public JsonResult<String> addResource(List<MultipartFile> multipartFiles,
-                                               Integer forumId, String url){
-        File file = new File(path);
-        if (!file.exists())
-            file.mkdirs();
-        for (MultipartFile multipartFile : multipartFiles) {
-            try {
-                String suffix = Objects.requireNonNull(multipartFile.getOriginalFilename()).substring(multipartFile.getOriginalFilename().lastIndexOf("."));
-                String newFileName = UUID.randomUUID().toString().replaceAll("-", "") + suffix;
-                multipartFile.transferTo(new File(path + newFileName));
-                String newUrl = url + newFileName;
-                if (forumResourceService.addForumResource(forumId, newUrl) <= 0)
-                    return JsonResult.error("添加失败");
-            } catch (BaseException e) {
-                return JsonResult.error(e.getStatus(), e.getMessage());
-            } catch (IOException e) {
-                return JsonResult.error("添加失败");
-            }
-        }
-        return JsonResult.success(200, "添加成功", url);
     }
 
     /**
@@ -144,12 +117,6 @@ public class ForumController {
     public JsonResult<List<TotalForum>> getForum(HttpServletRequest request) {
         String token = request.getHeader("Authorization");
         String openid = jwtUtil.getOpenidFromToken(token);
-//        List<ForumEntity> forumEntities = forumService.getForum(openid);
-//        for (ForumEntity forumEntity : forumEntities) {
-//            List<ForumResourceEntity> forumResourceEntities = forumResourceService.getForumResource(forumEntity.getId());
-//            List<CommentEntity> commentEntities = commentService.getComment(forumEntity.getId());
-//            List<ForumLikeEntity> forumLikeEntities = forumLikeService.getForumLike(forumEntity.getId());
-//        }
         List<TotalForum> totalForums = new ArrayList<>();
         List<ForumEntity> forumEntities = forumService.getForum();
         for (ForumEntity forumEntity : forumEntities) {
@@ -163,6 +130,7 @@ public class ForumController {
             totalForum.setImgOrRadio(forumResourceService.getFiles(forumEntity.getId()));
             totalForum.setLikes(forumLikeService.getLikeNames(forumEntity.getId()));
             totalForum.setComments(commentService.getNameComment(forumEntity.getId()));
+            totalForums.add(totalForum);
         }
         return JsonResult.success(totalForums);
     }

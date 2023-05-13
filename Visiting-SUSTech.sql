@@ -55,6 +55,7 @@ create table comment(
 
 create table forum_resource(
                                id serial primary key,
-                               openid text references user_info(openid),
-                               content text
+                               forum_id integer, --references user_info(openid),
+                               resource text
+
 );

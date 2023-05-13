@@ -16,7 +16,6 @@ import java.sql.Timestamp;
 @TableName("comment")
 public class CommentEntity {
     @TableId
-    private Integer id;
     private String openid;
     private String nickname;
     private Integer forumId;
