@@ -1,5 +1,6 @@
 drop table if exists appointment;
 drop table if exists user_info;
+drop table if exists news;
 
 create table user_info(
                           openid text primary key,
@@ -24,4 +25,13 @@ create table appointment(
                             accompanying_num int,
                             purpose text,
                             comment text
+);
+
+create table news(
+                     id serial primary key,
+                     title varchar(100) not null,
+                     content text not null,
+                     picture_url text,
+                     create_time timestamp default current_timestamp,
+                     update_time timestamp default current_timestamp
 );
