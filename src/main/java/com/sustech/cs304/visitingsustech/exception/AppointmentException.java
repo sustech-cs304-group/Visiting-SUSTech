@@ -1,5 +1,10 @@
 package com.sustech.cs304.visitingsustech.exception;
 
+/**
+ * Set up application exception format.
+ *
+ * @author sui_h
+ */
 public class AppointmentException extends BaseException{
     public AppointmentException() {
         super("Bad Request", 400);

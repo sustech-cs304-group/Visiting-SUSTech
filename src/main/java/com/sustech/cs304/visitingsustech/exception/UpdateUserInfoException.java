@@ -1,5 +1,10 @@
 package com.sustech.cs304.visitingsustech.exception;
 
+/**
+ * Set up update user info exception format.
+ *
+ * @author sui_h
+ */
 public class UpdateUserInfoException extends BaseException{
     public UpdateUserInfoException() {
         super("Bad Request", 400);

@@ -3,6 +3,11 @@ package com.sustech.cs304.visitingsustech.util;
 import javax.crypto.Cipher;
 import java.security.Key;
 
+/**
+ * Details of encrypt handling.
+ *
+ * @author sui_h
+ */
 public class EncryptUtil {
     private static String strDefaultKey = "2023@#$%^&";
     private Cipher encryptCipher = null;

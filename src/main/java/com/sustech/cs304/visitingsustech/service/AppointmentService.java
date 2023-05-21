@@ -6,6 +6,11 @@ import com.sustech.cs304.visitingsustech.entity.AppointmentEntity;
 
 import java.util.List;
 
+/**
+ * Appointment services(add, delete, update, query).
+ *
+ * @author pound
+ */
 public interface AppointmentService extends IService<AppointmentEntity> {
 
      int addAppointment(AppointmentEntity appointmentEntity);
