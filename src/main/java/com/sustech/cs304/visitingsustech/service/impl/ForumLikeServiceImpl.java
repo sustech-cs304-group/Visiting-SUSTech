@@ -36,6 +36,10 @@ public class ForumLikeServiceImpl extends ServiceImpl<ForumLikeMapper, ForumLike
         UserInfoEntity userInfoEntity = userInfoMapper.selectById(forumLikeEntity.getOpenid());
         if (userInfoEntity == null)
             throw new BaseException("Invalid userID", 400);
+        QueryWrapper<ForumLikeEntity> wrapper = new QueryWrapper<ForumLikeEntity>()
+                .eq("openid", forumLikeEntity.getOpenid());
+        if (forumLikeMapper.selectList(wrapper).size() > 0)
+            throw new BaseException("Multiple likes", 400);
         return forumLikeMapper.insert(forumLikeEntity);
     }
 
@@ -43,7 +47,7 @@ public class ForumLikeServiceImpl extends ServiceImpl<ForumLikeMapper, ForumLike
     public List<ForumLikeEntity> getForumLike(Integer forumId) {
         ForumEntity forumEntity = forumMapper.selectById(forumId);
         if (forumEntity == null)
-            throw new AppointmentException("Invalid forumID", 400);
+            throw new BaseException("Invalid forumID", 400);
         QueryWrapper<ForumLikeEntity> forumLikeWrapper;
         forumLikeWrapper = new QueryWrapper<ForumLikeEntity>().eq("forum_id", forumId);
         return forumLikeMapper.selectList(forumLikeWrapper);
@@ -53,7 +57,7 @@ public class ForumLikeServiceImpl extends ServiceImpl<ForumLikeMapper, ForumLike
     public List<String> getLikeNames(Integer forumId) {
         ForumEntity forumEntity = forumMapper.selectById(forumId);
         if (forumEntity == null)
-            throw new AppointmentException("Invalid forumID", 400);
+            throw new BaseException("Invalid forumID", 400);
         QueryWrapper<ForumLikeEntity> forumLikeWrapper;
         forumLikeWrapper = new QueryWrapper<ForumLikeEntity>().eq("forum_id", forumId);
         List<ForumLikeEntity> forumLikeEntities = forumLikeMapper.selectList(forumLikeWrapper);
