@@ -4,6 +4,7 @@ drop table if exists comment;
 drop table if exists forum_like;
 drop table if exists forum_resource;
 drop table if exists user_info;
+drop table if exists news;
 
 create table user_info(
                           openid text primary key,
