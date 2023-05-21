@@ -37,7 +37,8 @@ public class ForumLikeServiceImpl extends ServiceImpl<ForumLikeMapper, ForumLike
         if (userInfoEntity == null)
             throw new BaseException("Invalid userID", 400);
         QueryWrapper<ForumLikeEntity> wrapper = new QueryWrapper<ForumLikeEntity>()
-                .eq("openid", forumLikeEntity.getOpenid());
+                .eq("openid", forumLikeEntity.getOpenid())
+                .eq("forum_id", forumLikeEntity.getForumId());
         if (forumLikeMapper.selectList(wrapper).size() > 0)
             throw new BaseException("Multiple likes", 400);
         return forumLikeMapper.insert(forumLikeEntity);
