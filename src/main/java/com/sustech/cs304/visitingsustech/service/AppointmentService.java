@@ -8,11 +8,12 @@ import java.util.List;
 
 public interface AppointmentService extends IService<AppointmentEntity> {
 
-    public int addAppointment(AppointmentEntity appointmentEntity);
+     int addAppointment(AppointmentEntity appointmentEntity);
 
-    public int deleteAppointment(String openid, Integer id);
+     int deleteAppointment(String openid, Integer id);
 
-    public int updateAppointment(String openid, AppointmentEntity appointmentEntity);
+     int updateAppointment(String openid, AppointmentEntity appointmentEntity);
 
-    public List<AppointmentEntity> getAppointment(String openid);
+     List<AppointmentEntity> getAppointment(String openid);
+
 }
