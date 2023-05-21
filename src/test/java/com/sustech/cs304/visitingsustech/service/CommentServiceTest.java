@@ -31,6 +31,7 @@ public class CommentServiceTest {
     public void addTest(){
         userService.insertUser("1");
         forumEntity.setId(1);
+        forumEntity.setOpenid("1");
         forumService.addForum(forumEntity);
         commentEntity.setForumId(1);
         commentEntity.setNickname("eee");

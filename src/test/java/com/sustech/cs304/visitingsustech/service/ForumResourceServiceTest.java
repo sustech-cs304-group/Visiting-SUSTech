@@ -26,6 +26,7 @@ public class ForumResourceServiceTest {
     public void addTest(){
         userService.insertUser("3");
         forumEntity.setId(3);
+        forumEntity.setOpenid("3");
         forumService.addForum(forumEntity);
         Assert.assertEquals(1, forumResourceService.addForumResource(3, "test"));
     }
