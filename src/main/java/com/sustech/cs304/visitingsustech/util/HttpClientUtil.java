@@ -19,6 +19,11 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
+/**
+ * Details of httpClient operation handling.
+ *
+ * @author sui_h
+ */
 public class HttpClientUtil {
 
     private HttpClientUtil() {

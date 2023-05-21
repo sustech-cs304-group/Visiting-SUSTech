@@ -5,6 +5,11 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.web.servlet.config.annotation.ResourceHandlerRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
+/**
+ * Set up image configuration.
+ *
+ * @author sui_h
+ */
 @Configuration
 public class ImgConfig implements WebMvcConfigurer {
     @Value("${spring.servlet.multipart.location}")

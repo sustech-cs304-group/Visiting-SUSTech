@@ -11,6 +11,11 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.web.servlet.HandlerInterceptor;
 
+/**
+ * Set up jwt interceptor.
+ *
+ * @author sui_h
+ */
 @Component
 public class JwtInterceptor implements HandlerInterceptor {
 

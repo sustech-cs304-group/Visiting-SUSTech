@@ -8,6 +8,11 @@ import java.sql.Timestamp;
 import java.util.List;
 import java.util.Map;
 
+/**
+ * Vo for forum info introduction.
+ *
+ * @author pound
+ */
 @Data
 public class ForumVo {
     private String content;

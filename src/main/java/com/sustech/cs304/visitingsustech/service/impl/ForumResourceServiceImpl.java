@@ -23,6 +23,11 @@ import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * Implementation of forumResource service.
+ *
+ * @author pound
+ */
 @Service
 public class ForumResourceServiceImpl extends ServiceImpl<ForumResourceMapper, ForumResourceEntity> implements ForumResourceService {
     @Autowired
@@ -37,25 +42,7 @@ public class ForumResourceServiceImpl extends ServiceImpl<ForumResourceMapper, F
         ForumResourceEntity forumResourceEntity = new ForumResourceEntity();
         forumResourceEntity.setResource(url);
         forumResourceEntity.setForumId(forumId);
-//        if (userInfoEntity == null)
-//            throw new AppointmentException("Invalid userID", 400);
-//        if (!IdCardValidator.isValid(appointmentEntity.getIdentityCard()))
-//            throw new AppointmentException("Invalid identityCard", 400);
-//        if (!appointmentEntity.getPhone().matches("^1[3-9]\\d{9}$"))
-//            throw new AppointmentException("Invalid phone number", 400);
-//        appointmentEntity.setCreateTime(new Timestamp(System.currentTimeMillis()));
         return forumResourceMapper.insert(forumResourceEntity);
-    }
-
-    @Override
-    public int deleteForumResource(String openid, Integer id) {
-        ForumEntity forumEntity = forumMapper.selectById(id);
-        UserInfoEntity userInfoEntity = userInfoMapper.selectById(openid);
-//        if (forumEntity == null || userInfoEntity == null)
-//            throw new AppointmentException("Invalid forumID or userID", 400);
-//        if (!(userInfoEntity.getType().equals("admin") || forumEntity.getOpenid().equals(openid)))
-//            throw new AppointmentException("You are not allowed to delete this appointment", 403);
-        return forumResourceMapper.deleteById(id);
     }
 
     @Override

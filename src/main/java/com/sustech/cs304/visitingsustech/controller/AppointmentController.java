@@ -17,6 +17,11 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
+/**
+ * For Application operations.
+ *
+ * @author pound
+ */
 @RestController
 @RequestMapping("/appointment")
 public class AppointmentController {
@@ -28,7 +33,13 @@ public class AppointmentController {
     private UserService userService;
     @Autowired
     private JwtUtil jwtUtil;
-
+    /**
+     * Add an appointment.
+     *
+     * @param appointmentVo Info of appointment to add
+     * @param request Http request
+     * @return Message of success or fail
+     */
     @PostMapping("/add")
     public JsonResult<String> addAppointment(@RequestBody AppointmentVo appointmentVo,
                                              HttpServletRequest request) {
@@ -47,7 +58,13 @@ public class AppointmentController {
             return JsonResult.error(e.getStatus(), e.getMessage());
         }
     }
-
+    /**
+     * Delete an appointment.
+     *
+     * @param request Http request
+     * @param id Id to delete
+     * @return Message of success or fail.
+     */
     @PostMapping("/delete")
     public JsonResult<Void> deleteAppointment(@RequestParam("id") Integer id,
                                               HttpServletRequest request) {
@@ -62,7 +79,13 @@ public class AppointmentController {
             return JsonResult.error(e.getStatus(), e.getMessage());
         }
     }
-
+    /**
+     * Update an appointment.
+     *
+     * @param request Http request
+     * @param appointmentVo Info of appointment to update
+     * @return Message of success or fail.
+     */
     @PostMapping("/update")
     public JsonResult<Void> updateAppointment(@RequestBody AppointmentVo appointmentVo,
                                               HttpServletRequest request) {
@@ -79,14 +102,27 @@ public class AppointmentController {
             return JsonResult.error(e.getStatus(), e.getMessage());
         }
     }
-
+    /**
+     * Query all appointment of a user.
+     *
+     * @param request Http request
+     * @return All the appointments of the user.
+     */
     @GetMapping("/query")
     public JsonResult<List<AppointmentEntity>> getAppointment(HttpServletRequest request) {
         String token = request.getHeader("Authorization");
         String openid = jwtUtil.getOpenidFromToken(token);
         return JsonResult.success(appointmentService.getAppointment(openid));
     }
-
+    /**
+     * Justify an appointment.
+     *
+     * @param request Http request
+     * @param id Appointment id to justify
+     * @param approval Approve or not
+     * @param comment Feedback
+     * @return Message of success or fail.
+     */
     @PostMapping("/justify")
     public JsonResult<Void> justifyAppointment(HttpServletRequest request, @RequestParam("id") Integer id, @RequestParam("approval") Boolean approval, @RequestParam("comment") String comment) {
         String token = request.getHeader("Authorization");

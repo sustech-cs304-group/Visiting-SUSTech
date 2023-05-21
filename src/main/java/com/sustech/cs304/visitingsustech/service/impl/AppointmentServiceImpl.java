@@ -15,6 +15,11 @@ import org.springframework.stereotype.Service;
 import java.sql.Timestamp;
 import java.util.List;
 
+/**
+ * Implementation of appointment service.
+ *
+ * @author pound
+ */
 @Service
 public class AppointmentServiceImpl extends ServiceImpl<AppointmentMapper, AppointmentEntity> implements AppointmentService {
     @Autowired

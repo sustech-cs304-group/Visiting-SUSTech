@@ -84,28 +84,6 @@ public class ForumResourceController {
         return JsonResult.success(200, "添加成功", url);
     }
 
-    /**
-     * Delete a forum resource.
-     *
-     * @param id Id to delete
-     * @param request Http request
-     * @return Message of success or fail
-     */
-    @PostMapping("/delete")
-    public JsonResult<Void> deleteForumResource(@RequestParam("id") Integer id,
-                                        HttpServletRequest request) {
-        try {
-            String token = request.getHeader("Authorization");
-            String openid = jwtUtil.getOpenidFromToken(token);
-            if (forumResourceService.deleteForumResource(openid, id) > 0)
-                return JsonResult.success();
-            else
-                return JsonResult.error("删除失败");
-        } catch (BaseException e) {
-            return JsonResult.error(e.getStatus(), e.getMessage());
-        }
-    }
-
 //    @GetMapping("/query")
 //    public JsonResult<List<ForumResourceEntity>> getForumResource(HttpServletRequest request, Integer forumId) {
 //        String token = request.getHeader("Authorization");

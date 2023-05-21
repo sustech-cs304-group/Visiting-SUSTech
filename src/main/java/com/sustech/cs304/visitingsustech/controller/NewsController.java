@@ -16,6 +16,11 @@ import org.springframework.web.bind.annotation.*;
 import java.sql.Timestamp;
 import java.util.List;
 
+/**
+ * For news operations.
+ *
+ * @author pound
+ */
 @RestController
 @RequestMapping("/news")
 public class NewsController {
@@ -27,7 +32,13 @@ public class NewsController {
 
     @Autowired
     private JwtUtil jwtUtil;
-
+    /**
+     * Create news.
+     *
+     * @param newsVo Info of news to add
+     * @param request Http request
+     * @return Message of success or fail
+     */
     @PostMapping("/create")
     public JsonResult<String> createNews(@RequestBody NewsVo newsVo,
                                          HttpServletRequest request) {
@@ -50,7 +61,11 @@ public class NewsController {
             return JsonResult.error(e.getStatus(), e.getMessage());
         }
     }
-
+    /**
+     * Query all news.
+     *
+     * @return List of all news.
+     */
     @GetMapping("/list")
     public JsonResult<List<NewsEntity>> listNews() {
         return JsonResult.success(newsService.getAllNews());

@@ -5,6 +5,11 @@ import lombok.Data;
 import java.sql.Date;
 import java.sql.Timestamp;
 
+/**
+ * Vo for appointment info introduction.
+ *
+ * @author pound
+ */
 @Data
 public class AppointmentVo {
     private Integer id;

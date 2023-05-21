@@ -4,6 +4,11 @@ import lombok.Data;
 
 import javax.validation.constraints.NotBlank;
 
+/**
+ * Vo for user info introduction.
+ *
+ * @author sui_h
+ */
 @Data
 public class UserInfoVo {
     @NotBlank

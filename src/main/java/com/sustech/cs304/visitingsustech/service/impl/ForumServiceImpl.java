@@ -6,6 +6,7 @@ import com.sustech.cs304.visitingsustech.entity.AppointmentEntity;
 import com.sustech.cs304.visitingsustech.entity.ForumEntity;
 import com.sustech.cs304.visitingsustech.entity.UserInfoEntity;
 import com.sustech.cs304.visitingsustech.exception.AppointmentException;
+import com.sustech.cs304.visitingsustech.exception.BaseException;
 import com.sustech.cs304.visitingsustech.mapper.AppointmentMapper;
 import com.sustech.cs304.visitingsustech.mapper.ForumMapper;
 import com.sustech.cs304.visitingsustech.mapper.UserInfoMapper;
@@ -18,6 +19,11 @@ import org.springframework.stereotype.Service;
 import java.sql.Timestamp;
 import java.util.List;
 
+/**
+ * Implementation of forum service.
+ *
+ * @author pound
+ */
 @Service
 public class ForumServiceImpl extends ServiceImpl<ForumMapper, ForumEntity> implements ForumService {
     @Autowired
@@ -28,25 +34,9 @@ public class ForumServiceImpl extends ServiceImpl<ForumMapper, ForumEntity> impl
     @Override
     public int addForum(ForumEntity forumEntity) {
         UserInfoEntity userInfoEntity = userInfoMapper.selectById(forumEntity.getOpenid());
-//        if (userInfoEntity == null)
-//            throw new AppointmentException("Invalid userID", 400);
-//        if (!IdCardValidator.isValid(appointmentEntity.getIdentityCard()))
-//            throw new AppointmentException("Invalid identityCard", 400);
-//        if (!appointmentEntity.getPhone().matches("^1[3-9]\\d{9}$"))
-//            throw new AppointmentException("Invalid phone number", 400);
-//        appointmentEntity.setCreateTime(new Timestamp(System.currentTimeMillis()));
+        if (userInfoEntity == null)
+            throw new BaseException("Invalid userID", 400);
         return forumMapper.insert(forumEntity);
-    }
-
-    @Override
-    public int deleteForum(String openid, Integer id) {
-        ForumEntity forumEntity = forumMapper.selectById(id);
-        UserInfoEntity userInfoEntity = userInfoMapper.selectById(openid);
-//        if (forumEntity == null || userInfoEntity == null)
-//            throw new AppointmentException("Invalid forumID or userID", 400);
-//        if (!(userInfoEntity.getType().equals("admin") || forumEntity.getOpenid().equals(openid)))
-//            throw new AppointmentException("You are not allowed to delete this appointment", 403);
-        return forumMapper.deleteById(id);
     }
 
     @Override

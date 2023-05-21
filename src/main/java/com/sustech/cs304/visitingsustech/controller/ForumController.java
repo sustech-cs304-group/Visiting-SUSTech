@@ -86,28 +86,6 @@ public class ForumController {
     }
 
     /**
-     * Delete a forum.
-     *
-     * @param id Forum id to delete
-     * @param request Http request
-     * @return Message of success or fail
-     */
-    @PostMapping("/delete")
-    public JsonResult<Void> deleteForum(@RequestParam("id") Integer id,
-                                              HttpServletRequest request) {
-        try {
-            String token = request.getHeader("Authorization");
-            String openid = jwtUtil.getOpenidFromToken(token);
-            if (forumService.deleteForum(openid, id) > 0)
-                return JsonResult.success();
-            else
-                return JsonResult.error("删除失败");
-        } catch (BaseException e) {
-            return JsonResult.error(e.getStatus(), e.getMessage());
-        }
-    }
-
-    /**
      * Query all forum entities.
      *
      * @param request Http request
@@ -129,7 +107,7 @@ public class ForumController {
             totalForum.setAvatarUrl(userService.queryUserInfo(forumEntity.getOpenid()).getAvatarUrl());
             totalForum.setImgOrRadio(forumResourceService.getFiles(forumEntity.getId()));
             totalForum.setLikes(forumLikeService.getLikeNames(forumEntity.getId()));
-            totalForum.setComments(commentService.getNameComment(forumEntity.getId()));
+            totalForum.setComments(commentService.getComment(forumEntity.getId()));
             totalForums.add(totalForum);
         }
         return JsonResult.success(totalForums);

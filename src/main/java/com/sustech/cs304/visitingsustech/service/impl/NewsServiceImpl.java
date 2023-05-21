@@ -10,6 +10,11 @@ import org.springframework.stereotype.Service;
 
 import java.util.List;
 
+/**
+ * Implementation of news service.
+ *
+ * @author pound
+ */
 @Service
 public class NewsServiceImpl extends ServiceImpl<NewsMapper, NewsEntity> implements NewsService {
     @Autowired

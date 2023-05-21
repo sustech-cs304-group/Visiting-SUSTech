@@ -6,10 +6,13 @@ import com.sustech.cs304.visitingsustech.vo.UserInfoVo;
 
 import java.util.List;
 
+/**
+ * ForumLike services(add, query all forumLike info, query usernames of likes).
+ *
+ * @author pound
+ */
 public interface ForumLikeService extends IService<ForumLikeEntity> {
     public int addForumLike(ForumLikeEntity forumLikeEntity);
-
-    public int deleteForumLike(String openid, Integer id);
 
     public List<ForumLikeEntity> getForumLike(Integer forumId);
 

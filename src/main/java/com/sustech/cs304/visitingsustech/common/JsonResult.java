@@ -4,7 +4,11 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.Data;
 
-
+/**
+ * Set up json return format.
+ *
+ * @author sui_h
+ */
 @Data
 public class JsonResult<E> {
 

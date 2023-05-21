@@ -10,10 +10,13 @@ import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
 
+/**
+ * ForumResource services(add, query all resource info, query urls).
+ *
+ * @author pound
+ */
 public interface ForumResourceService extends IService<ForumResourceEntity> {
     public int addForumResource(Integer forumId, String url);
-
-    public int deleteForumResource(String openid, Integer id);
 
     public List<ForumResourceEntity> getForumResource(Integer forumId);
 
