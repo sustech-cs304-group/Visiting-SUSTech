@@ -8,10 +8,13 @@ import com.sustech.cs304.visitingsustech.vo.UserInfoVo;
 
 import java.util.List;
 
+/**
+ * Forum services(add, query all forums, query forum of one user).
+ *
+ * @author pound
+ */
 public interface ForumService extends IService<ForumEntity> {
     public int addForum(ForumEntity ForumEntity);
-
-    public int deleteForum(String openid, Integer id);
 
     public List<ForumEntity> getForum();
 

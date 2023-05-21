@@ -17,6 +17,11 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
+/**
+ * For Application operations.
+ *
+ * @author pound
+ */
 @RestController
 @RequestMapping("/appointment")
 public class AppointmentController {
@@ -28,7 +33,13 @@ public class AppointmentController {
     private UserService userService;
     @Autowired
     private JwtUtil jwtUtil;
-
+    /**
+     * Add an appointment.
+     *
+     * @param appointmentVo Info of appointment to add
+     * @param request Http request
+     * @return Message of success or fail
+     */
     @PostMapping("/add")
     public JsonResult<String> addAppointment(@RequestBody AppointmentVo appointmentVo,
                                              HttpServletRequest request) {

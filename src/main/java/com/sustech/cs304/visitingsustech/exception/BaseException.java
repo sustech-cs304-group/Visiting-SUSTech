@@ -1,5 +1,10 @@
 package com.sustech.cs304.visitingsustech.exception;
 
+/**
+ * Set up base exception format.
+ *
+ * @author sui_h
+ */
 public class BaseException extends RuntimeException {
     private final int status;
 

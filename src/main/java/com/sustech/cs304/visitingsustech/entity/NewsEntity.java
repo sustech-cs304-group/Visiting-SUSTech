@@ -6,6 +6,11 @@ import lombok.Data;
 
 import java.sql.Timestamp;
 
+/**
+ * Stores news info.
+ *
+ * @author pound
+ */
 @Data
 @TableName("news")
 public class NewsEntity {

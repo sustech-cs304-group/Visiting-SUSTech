@@ -72,28 +72,6 @@ public class CommentController {
     }
 
     /**
-     * Delete a comment.
-     *
-     * @param id Comment id to delete
-     * @param request Http request
-     * @return Message of success or fail
-     */
-    @PostMapping("/delete")
-    public JsonResult<Void> deleteComment(@RequestParam("id") Integer id,
-                                              HttpServletRequest request) {
-        try {
-            String token = request.getHeader("Authorization");
-            String openid = jwtUtil.getOpenidFromToken(token);
-            if (commentService.deleteComment(openid, id) > 0)
-                return JsonResult.success();
-            else
-                return JsonResult.error("删除失败");
-        } catch (BaseException e) {
-            return JsonResult.error(e.getStatus(), e.getMessage());
-        }
-    }
-
-    /**
      * Query all comments of a forum.
      *
      * @param request Http request

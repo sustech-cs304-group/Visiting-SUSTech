@@ -73,28 +73,6 @@ public class ForumLikeController {
     }
 
     /**
-     * Delete a like to a forum.
-     *
-     * @param id ForumLike id to delete
-     * @param request Http request
-     * @return Message of success or fail
-     */
-    @PostMapping("/delete")
-    public JsonResult<Void> deleteForumLike(@RequestParam("id") Integer id,
-                                          HttpServletRequest request) {
-        try {
-            String token = request.getHeader("Authorization");
-            String openid = jwtUtil.getOpenidFromToken(token);
-            if (forumLikeService.deleteForumLike(openid, id) > 0)
-                return JsonResult.success();
-            else
-                return JsonResult.error("删除失败");
-        } catch (BaseException e) {
-            return JsonResult.error(e.getStatus(), e.getMessage());
-        }
-    }
-
-    /**
      * Query all likes of a forum.
      *
      * @param request Http request

@@ -15,12 +15,23 @@ import java.io.IOException;
 import java.util.Objects;
 import java.util.UUID;
 
+/**
+ * For image upload.
+ *
+ * @author pound
+ */
 @RestController
 @RequestMapping("/image")
 public class ImageController {
     @Value("${spring.servlet.multipart.location}")
     private String path;
-
+    /**
+     * Add an image.
+     *
+     * @param image Image to add
+     * @param request Http request
+     * @return Message of success or fail
+     */
     @PostMapping("/upload_image")
     public JsonResult<String> updateAvatar(HttpServletRequest request, @RequestParam("image") MultipartFile image) {
         if (image.isEmpty())
