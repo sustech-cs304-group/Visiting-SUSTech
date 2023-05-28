@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="zh"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>UserInfoUtil.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">Visiting-SUSTech</a> &gt; <a href="index.source.html" class="el_package">com.sustech.cs304.visitingsustech.util</a> &gt; <span class="el_source">UserInfoUtil.java</span></div><h1>UserInfoUtil.java</h1><pre class="source lang-java linenums">package com.sustech.cs304.visitingsustech.util;
+
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.JsonNode;
+import com.fasterxml.jackson.databind.ObjectMapper;
+
+import java.util.HashMap;
+import java.util.Map;
+
+/**
+ * Details of user info handling.
+ *
+ * @author sui_h
+ */
+<span class="nc" id="L15">public class UserInfoUtil {</span>
+    public static final String WX_LOGIN_URL = &quot;https://api.weixin.qq.com/sns/jscode2session&quot;;
+    public static final String WX_LOGIN_APPID = &quot;wx64166ba63297087b&quot;;
+    public static final String WX_LOGIN_SECRET = &quot;bfc933b4c7c24ef263bc360580a7e35a&quot;;
+    public static final String WX_LOGIN_GRANT_TYPE = &quot;authorization_code&quot;;
+
+<span class="nc" id="L21">    private static final ObjectMapper objectMapper = new ObjectMapper();</span>
+
+    public static JsonNode getResultJson(String code) {
+<span class="nc" id="L24">        Map&lt;String, String&gt; params = new HashMap&lt;&gt;();</span>
+<span class="nc" id="L25">        params.put(&quot;appid&quot;, WX_LOGIN_APPID);</span>
+<span class="nc" id="L26">        params.put(&quot;secret&quot;, WX_LOGIN_SECRET);</span>
+<span class="nc" id="L27">        params.put(&quot;js_code&quot;, code);</span>
+<span class="nc" id="L28">        params.put(&quot;grant_type&quot;, WX_LOGIN_GRANT_TYPE);</span>
+<span class="nc" id="L29">        String wxRequestResult = HttpClientUtil.doGet(WX_LOGIN_URL, params);</span>
+        try {
+<span class="nc" id="L31">            return objectMapper.readTree(wxRequestResult);</span>
+<span class="nc" id="L32">        } catch (JsonProcessingException e) {</span>
+<span class="nc" id="L33">            throw new RuntimeException(e);</span>
+        }
+    }
+
+    public static String getOpenid(String code) {
+<span class="nc" id="L38">        return getResultJson(code).get(&quot;openid&quot;).asText();</span>
+    }
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.9.202303310957</span></div></body></html>
