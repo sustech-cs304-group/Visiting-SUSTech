@@ -20,7 +20,6 @@ public class ForumResourceServiceTest {
     @Autowired
     private UserService userService;
     private ForumEntity forumEntity = new ForumEntity();
-    private ForumResourceEntity forumResourceEntity = new ForumResourceEntity();
 
     @Test
     public void addTest(){
@@ -34,5 +33,10 @@ public class ForumResourceServiceTest {
     @Test
     public void getTest() {
         System.out.println(forumResourceService.getForumResource(3));
+    }
+
+    @Test
+    public void getFileTest() {
+        System.out.println(forumResourceService.getFiles(3));
     }
 }
