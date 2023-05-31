@@ -1,0 +1,144 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="zh"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>AppointmentController.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">Visiting-SUSTech</a> &gt; <a href="index.source.html" class="el_package">com.sustech.cs304.visitingsustech.controller</a> &gt; <span class="el_source">AppointmentController.java</span></div><h1>AppointmentController.java</h1><pre class="source lang-java linenums">package com.sustech.cs304.visitingsustech.controller;
+
+import com.baomidou.mybatisplus.core.conditions.update.UpdateWrapper;
+import com.sustech.cs304.visitingsustech.common.JsonResult;
+import com.sustech.cs304.visitingsustech.entity.AppointmentEntity;
+import com.sustech.cs304.visitingsustech.entity.UserInfoEntity;
+import com.sustech.cs304.visitingsustech.exception.BaseException;
+import com.sustech.cs304.visitingsustech.mapper.AppointmentMapper;
+import com.sustech.cs304.visitingsustech.service.AppointmentService;
+import com.sustech.cs304.visitingsustech.service.UserService;
+import com.sustech.cs304.visitingsustech.util.JwtUtil;
+import com.sustech.cs304.visitingsustech.vo.AppointmentVo;
+import jakarta.servlet.http.HttpServletRequest;
+import org.springframework.beans.BeanUtils;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
+
+/**
+ * For Application operations.
+ *
+ * @author pound
+ */
+@RestController
+@RequestMapping(&quot;/appointment&quot;)
+<span class="fc" id="L27">public class AppointmentController {</span>
+    @Autowired
+    private AppointmentService appointmentService;
+    @Autowired
+    private AppointmentMapper appointmentMapper;
+    @Autowired
+    private UserService userService;
+    @Autowired
+    private JwtUtil jwtUtil;
+    /**
+     * Add an appointment.
+     *
+     * @param appointmentVo Info of appointment to add
+     * @param request Http request
+     * @return Message of success or fail
+     */
+    @PostMapping(&quot;/add&quot;)
+    public JsonResult&lt;String&gt; addAppointment(@RequestBody AppointmentVo appointmentVo,
+                                             HttpServletRequest request) {
+<span class="nc" id="L46">        String token = request.getHeader(&quot;Authorization&quot;);</span>
+<span class="nc" id="L47">        String openid = jwtUtil.getOpenidFromToken(token);</span>
+<span class="nc" id="L48">        AppointmentEntity appointmentEntity = new AppointmentEntity();</span>
+<span class="nc" id="L49">        BeanUtils.copyProperties(appointmentVo, appointmentEntity);</span>
+<span class="nc" id="L50">        appointmentEntity.setOpenid(openid);</span>
+<span class="nc" id="L51">        appointmentEntity.setStatus(0);</span>
+        try {
+<span class="nc bnc" id="L53" title="All 2 branches missed.">            if (appointmentService.addAppointment(appointmentEntity) &gt; 0)</span>
+<span class="nc" id="L54">                return JsonResult.success(&quot;success&quot;);</span>
+            else
+<span class="nc" id="L56">                return JsonResult.error(&quot;添加失败&quot;);</span>
+<span class="nc" id="L57">        } catch (BaseException e) {</span>
+<span class="nc" id="L58">            return JsonResult.error(e.getStatus(), e.getMessage());</span>
+        }
+    }
+    /**
+     * Delete an appointment.
+     *
+     * @param request Http request
+     * @param id Id to delete
+     * @return Message of success or fail.
+     */
+    @PostMapping(&quot;/delete&quot;)
+    public JsonResult&lt;Void&gt; deleteAppointment(@RequestParam(&quot;id&quot;) Integer id,
+                                              HttpServletRequest request) {
+        try {
+<span class="nc" id="L72">            String token = request.getHeader(&quot;Authorization&quot;);</span>
+<span class="nc" id="L73">            String openid = jwtUtil.getOpenidFromToken(token);</span>
+<span class="nc bnc" id="L74" title="All 2 branches missed.">            if (appointmentService.deleteAppointment(openid, id) &gt; 0)</span>
+<span class="nc" id="L75">                return JsonResult.success();</span>
+            else
+<span class="nc" id="L77">                return JsonResult.error(&quot;删除失败&quot;);</span>
+<span class="nc" id="L78">        } catch (BaseException e) {</span>
+<span class="nc" id="L79">            return JsonResult.error(e.getStatus(), e.getMessage());</span>
+        }
+    }
+    /**
+     * Update an appointment.
+     *
+     * @param request Http request
+     * @param appointmentVo Info of appointment to update
+     * @return Message of success or fail.
+     */
+    @PostMapping(&quot;/update&quot;)
+    public JsonResult&lt;Void&gt; updateAppointment(@RequestBody AppointmentVo appointmentVo,
+                                              HttpServletRequest request) {
+<span class="nc" id="L92">        String token = request.getHeader(&quot;Authorization&quot;);</span>
+<span class="nc" id="L93">        String openid = jwtUtil.getOpenidFromToken(token);</span>
+<span class="nc" id="L94">        AppointmentEntity appointmentEntity = new AppointmentEntity();</span>
+<span class="nc" id="L95">        BeanUtils.copyProperties(appointmentVo, appointmentEntity);</span>
+        try {
+<span class="nc bnc" id="L97" title="All 2 branches missed.">            if (appointmentService.updateAppointment(openid, appointmentEntity) &gt; 0)</span>
+<span class="nc" id="L98">                return JsonResult.success();</span>
+            else
+<span class="nc" id="L100">                return JsonResult.error(&quot;更新失败&quot;);</span>
+<span class="nc" id="L101">        } catch (BaseException e) {</span>
+<span class="nc" id="L102">            return JsonResult.error(e.getStatus(), e.getMessage());</span>
+        }
+    }
+    /**
+     * Query all appointment of a user.
+     *
+     * @param request Http request
+     * @return All the appointments of the user.
+     */
+    @GetMapping(&quot;/query&quot;)
+    public JsonResult&lt;List&lt;AppointmentEntity&gt;&gt; getAppointment(HttpServletRequest request) {
+<span class="nc" id="L113">        String token = request.getHeader(&quot;Authorization&quot;);</span>
+<span class="nc" id="L114">        String openid = jwtUtil.getOpenidFromToken(token);</span>
+<span class="nc" id="L115">        return JsonResult.success(appointmentService.getAppointment(openid));</span>
+    }
+    /**
+     * Justify an appointment.
+     *
+     * @param request Http request
+     * @param id Appointment id to justify
+     * @param approval Approve or not
+     * @param comment Feedback
+     * @return Message of success or fail.
+     */
+    @PostMapping(&quot;/justify&quot;)
+    public JsonResult&lt;Void&gt; justifyAppointment(HttpServletRequest request, @RequestParam(&quot;id&quot;) Integer id, @RequestParam(&quot;approval&quot;) Boolean approval, @RequestParam(&quot;comment&quot;) String comment) {
+<span class="nc" id="L128">        String token = request.getHeader(&quot;Authorization&quot;);</span>
+<span class="nc" id="L129">        String openid = jwtUtil.getOpenidFromToken(token);</span>
+<span class="nc" id="L130">        UserInfoEntity userInfoEntity = userService.queryUserInfo(openid);</span>
+<span class="nc bnc" id="L131" title="All 4 branches missed.">        if (userInfoEntity == null || !userInfoEntity.getType().equals(&quot;admin&quot;))</span>
+<span class="nc" id="L132">            return JsonResult.error(403, &quot;权限不足&quot;);</span>
+<span class="nc" id="L133">        UpdateWrapper&lt;AppointmentEntity&gt; updateWrapper = new UpdateWrapper&lt;AppointmentEntity&gt;();</span>
+<span class="nc bnc" id="L134" title="All 2 branches missed.">        if (approval) {</span>
+<span class="nc" id="L135">            updateWrapper.eq(&quot;id&quot;, id).set(&quot;status&quot;, 1).set(&quot;comment&quot;, comment);</span>
+<span class="nc" id="L136">            appointmentMapper.update(null, updateWrapper);</span>
+        } else {
+<span class="nc" id="L138">            updateWrapper.eq(&quot;id&quot;, id).set(&quot;status&quot;, 2).set(&quot;comment&quot;, comment);</span>
+<span class="nc" id="L139">            appointmentMapper.update(null, updateWrapper);</span>
+        }
+<span class="nc" id="L141">        return JsonResult.success();</span>
+    }
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.9.202303310957</span></div></body></html>

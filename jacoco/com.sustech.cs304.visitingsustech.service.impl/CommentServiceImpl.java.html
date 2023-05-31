@@ -1,0 +1,76 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="zh"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>CommentServiceImpl.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">Visiting-SUSTech</a> &gt; <a href="index.source.html" class="el_package">com.sustech.cs304.visitingsustech.service.impl</a> &gt; <span class="el_source">CommentServiceImpl.java</span></div><h1>CommentServiceImpl.java</h1><pre class="source lang-java linenums">package com.sustech.cs304.visitingsustech.service.impl;
+
+import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
+import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
+import com.sustech.cs304.visitingsustech.entity.*;
+import com.sustech.cs304.visitingsustech.exception.AppointmentException;
+import com.sustech.cs304.visitingsustech.exception.BaseException;
+import com.sustech.cs304.visitingsustech.mapper.*;
+import com.sustech.cs304.visitingsustech.service.*;
+import com.sustech.cs304.visitingsustech.util.IdCardValidator;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+
+import java.sql.Timestamp;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
+/**
+ * Implementation of comment service.
+ *
+ * @author pound
+ */
+@Service
+<span class="fc" id="L26">public class CommentServiceImpl extends ServiceImpl&lt;CommentMapper, CommentEntity&gt; implements CommentService {</span>
+    @Autowired
+    private ForumMapper forumMapper;
+    @Autowired
+    private ForumResourceMapper forumResourceMapper;
+    @Autowired
+    private UserInfoMapper userInfoMapper;
+    @Autowired
+    private CommentMapper commentMapper;
+
+    @Override
+    public int addComment(CommentEntity commentEntity) {
+<span class="fc" id="L38">        UserInfoEntity userInfoEntity = userInfoMapper.selectById(commentEntity.getOpenid());</span>
+<span class="pc bpc" id="L39" title="1 of 2 branches missed.">        if (userInfoEntity == null)</span>
+<span class="nc" id="L40">            throw new BaseException(&quot;Invalid userID&quot;, 400);</span>
+<span class="fc" id="L41">        return commentMapper.insert(commentEntity);</span>
+    }
+
+    @Override
+    public List&lt;CommentEntity&gt; getComment(Integer forumId) {
+<span class="fc" id="L46">        ForumEntity forumEntity = forumMapper.selectById(forumId);</span>
+<span class="fc bfc" id="L47" title="All 2 branches covered.">        if (forumEntity == null)</span>
+<span class="fc" id="L48">            throw new BaseException(&quot;Invalid forumID&quot;, 400);</span>
+        QueryWrapper&lt;CommentEntity&gt; commentWrapper;
+<span class="fc" id="L50">        commentWrapper = new QueryWrapper&lt;CommentEntity&gt;().eq(&quot;forum_id&quot;, forumId);</span>
+<span class="fc" id="L51">        return commentMapper.selectList(commentWrapper);</span>
+    }
+
+    @Override
+    public Map&lt;String, ArrayList&lt;String&gt;&gt; getNameComment(Integer forumId) {
+<span class="fc" id="L56">        ForumEntity forumEntity = forumMapper.selectById(forumId);</span>
+<span class="fc bfc" id="L57" title="All 2 branches covered.">        if (forumEntity == null)</span>
+<span class="fc" id="L58">            throw new AppointmentException(&quot;Invalid forumID&quot;, 400);</span>
+        QueryWrapper&lt;CommentEntity&gt; commentWrapper;
+<span class="fc" id="L60">        commentWrapper = new QueryWrapper&lt;CommentEntity&gt;().eq(&quot;forum_id&quot;, forumId);</span>
+<span class="fc" id="L61">        Map&lt;String, ArrayList&lt;String&gt;&gt; map = new HashMap&lt;&gt;();</span>
+<span class="fc" id="L62">        List&lt;CommentEntity&gt; commentEntities = commentMapper.selectList(commentWrapper);</span>
+<span class="fc bfc" id="L63" title="All 2 branches covered.">        for (CommentEntity commentEntity : commentEntities) {</span>
+<span class="pc bpc" id="L64" title="1 of 2 branches missed.">            if (!map.containsKey(commentEntity.getNickname())) {</span>
+<span class="fc" id="L65">                ArrayList&lt;String&gt; arrayList = new ArrayList&lt;&gt;();</span>
+<span class="fc" id="L66">                arrayList.add(commentEntity.getContent());</span>
+<span class="fc" id="L67">                map.put(commentEntity.getNickname(), arrayList);</span>
+<span class="fc" id="L68">            }</span>
+            else {
+<span class="nc" id="L70">                map.get(commentEntity.getNickname()).add(commentEntity.getContent());</span>
+            }
+<span class="fc" id="L72">        }</span>
+<span class="fc" id="L73">        return map;</span>
+    }
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.9.202303310957</span></div></body></html>

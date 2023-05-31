@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="zh"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>UserInfoVo.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">Visiting-SUSTech</a> &gt; <a href="index.source.html" class="el_package">com.sustech.cs304.visitingsustech.vo</a> &gt; <span class="el_source">UserInfoVo.java</span></div><h1>UserInfoVo.java</h1><pre class="source lang-java linenums">package com.sustech.cs304.visitingsustech.vo;
+
+import lombok.Data;
+
+import javax.validation.constraints.NotBlank;
+
+/**
+ * Vo for user info introduction.
+ *
+ * @author sui_h
+ */
+<span class="pc bnc" id="L12" title="All 46 branches missed.">@Data</span>
+public class UserInfoVo {
+    @NotBlank
+<span class="fc" id="L15">    private String nickname;</span>
+    @NotBlank
+<span class="fc" id="L17">    private String name;</span>
+    @NotBlank
+<span class="fc" id="L19">    private String phone;</span>
+    @NotBlank
+<span class="fc" id="L21">    private String identityCard;</span>
+    @NotBlank
+<span class="fc" id="L23">    private Integer gender;</span>
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.9.202303310957</span></div></body></html>
