@@ -18,6 +18,11 @@ import java.io.IOException;
 import java.util.Objects;
 import java.util.UUID;
 
+/**
+ * Implementation of user service.
+ *
+ * @author pound
+ */
 @Service
 public class UserServiceImpl extends ServiceImpl<UserInfoMapper, UserInfoEntity> implements UserService {
     @Autowired

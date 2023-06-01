@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="zh"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>JwtInterceptor.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">Visiting-SUSTech</a> &gt; <a href="index.source.html" class="el_package">com.sustech.cs304.visitingsustech.interceptor</a> &gt; <span class="el_source">JwtInterceptor.java</span></div><h1>JwtInterceptor.java</h1><pre class="source lang-java linenums">package com.sustech.cs304.visitingsustech.interceptor;
+
+import com.sustech.cs304.visitingsustech.exception.TokenException;
+import com.sustech.cs304.visitingsustech.util.JwtUtil;
+import io.jsonwebtoken.ExpiredJwtException;
+import io.jsonwebtoken.MalformedJwtException;
+import io.jsonwebtoken.security.SignatureException;
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
+import org.springframework.web.servlet.HandlerInterceptor;
+
+/**
+ * Set up jwt interceptor.
+ *
+ * @author sui_h
+ */
+@Component
+<span class="fc" id="L20">public class JwtInterceptor implements HandlerInterceptor {</span>
+
+    @Autowired
+    private JwtUtil jwtUtil;
+
+    @Override
+    public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) {
+<span class="nc" id="L27">        String token = request.getHeader(&quot;Authorization&quot;);</span>
+        try {
+<span class="nc" id="L29">            jwtUtil.verifyToken(token);</span>
+<span class="nc" id="L30">            return true;</span>
+<span class="nc" id="L31">        } catch (ExpiredJwtException e) {</span>
+<span class="nc" id="L32">            e.printStackTrace();</span>
+<span class="nc" id="L33">            throw new TokenException(&quot;token过期！&quot;);</span>
+<span class="nc" id="L34">        } catch (MalformedJwtException e) {</span>
+<span class="nc" id="L35">            e.printStackTrace();</span>
+<span class="nc" id="L36">            throw new TokenException(&quot;token格式错误！&quot;);</span>
+<span class="nc" id="L37">        } catch (SignatureException e) {</span>
+<span class="nc" id="L38">            e.printStackTrace();</span>
+<span class="nc" id="L39">            throw new TokenException(&quot;无效签名！&quot;);</span>
+<span class="nc" id="L40">        } catch (IllegalArgumentException e) {</span>
+<span class="nc" id="L41">            e.printStackTrace();</span>
+<span class="nc" id="L42">            throw new TokenException(&quot;非法请求！&quot;);</span>
+<span class="nc" id="L43">        } catch (Exception e) {</span>
+<span class="nc" id="L44">            e.printStackTrace();</span>
+<span class="nc" id="L45">            throw new TokenException(&quot;token无效！&quot;);</span>
+        }
+    }
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.9.202303310957</span></div></body></html>

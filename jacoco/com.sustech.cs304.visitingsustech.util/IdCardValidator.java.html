@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="zh"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>IdCardValidator.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">Visiting-SUSTech</a> &gt; <a href="index.source.html" class="el_package">com.sustech.cs304.visitingsustech.util</a> &gt; <span class="el_source">IdCardValidator.java</span></div><h1>IdCardValidator.java</h1><pre class="source lang-java linenums">package com.sustech.cs304.visitingsustech.util;
+
+/**
+ * Details of IdCard validation handling.
+ *
+ * @author sui_h
+ */
+<span class="nc" id="L8">public class IdCardValidator {</span>
+<span class="fc" id="L9">    private static final int[] FACTORS = {7, 9, 10, 5, 8, 4, 2, 1, 6, 3, 7, 9, 10, 5, 8, 4, 2};</span>
+<span class="fc" id="L10">    private static final String[] CHECK_CODES = {&quot;1&quot;, &quot;0&quot;, &quot;X&quot;, &quot;9&quot;, &quot;8&quot;, &quot;7&quot;, &quot;6&quot;, &quot;5&quot;, &quot;4&quot;, &quot;3&quot;, &quot;2&quot;};</span>
+
+    public static boolean isValid(String idCard) {
+<span class="pc bpc" id="L13" title="2 of 4 branches missed.">        if (idCard == null || idCard.length() != 18) {</span>
+<span class="nc" id="L14">            return false;</span>
+        }
+<span class="fc" id="L16">        char[] chars = idCard.toCharArray();</span>
+<span class="fc" id="L17">        int sum = 0;</span>
+<span class="fc bfc" id="L18" title="All 2 branches covered.">        for (int i = 0; i &lt; chars.length - 1; i++) {</span>
+<span class="fc" id="L19">            char c = chars[i];</span>
+<span class="pc bpc" id="L20" title="2 of 4 branches missed.">            if (c &lt; '0' || c &gt; '9') {</span>
+<span class="nc" id="L21">                return false;</span>
+            }
+<span class="fc" id="L23">            int num = c - '0';</span>
+<span class="fc" id="L24">            sum += num * FACTORS[i];</span>
+        }
+<span class="fc" id="L26">        int remainder = sum % 11;</span>
+<span class="fc" id="L27">        String checkCode = CHECK_CODES[remainder];</span>
+<span class="fc" id="L28">        return checkCode.equals(String.valueOf(chars[17]));</span>
+    }
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.9.202303310957</span></div></body></html>

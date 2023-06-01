@@ -12,6 +12,11 @@ import javax.crypto.SecretKey;
 import javax.crypto.spec.SecretKeySpec;
 import java.util.Date;
 
+/**
+ * Details of jwt handling.
+ *
+ * @author sui_h
+ */
 @Data
 @Component
 public class JwtUtil {

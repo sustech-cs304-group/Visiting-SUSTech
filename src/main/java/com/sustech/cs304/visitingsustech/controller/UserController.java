@@ -17,6 +17,11 @@ import java.io.IOException;
 import java.util.Objects;
 import java.util.UUID;
 
+/**
+ * For user operations.
+ *
+ * @author pound
+ */
 @RestController
 @RequestMapping("/user/person-info")
 public class UserController {
@@ -28,7 +33,13 @@ public class UserController {
 
     @Value("${spring.servlet.multipart.location}")
     private String path;
-
+    /**
+     * Add a user.
+     *
+     * @param userInfoVo Info of user to update
+     * @param request Http request
+     * @return Message of success or fail
+     */
     @PostMapping("/update")
     public JsonResult<Void> updateUserInfo(HttpServletRequest request, @RequestBody UserInfoVo userInfoVo) {
         String token = request.getHeader("Authorization");
@@ -42,7 +53,13 @@ public class UserController {
             return JsonResult.error(e.getStatus(), e.getMessage());
         }
     }
-
+    /**
+     * Update an avatar.
+     *
+     * @param avatar Avatar to update
+     * @param request Http request
+     * @return Message of success or fail
+     */
     @PostMapping("/update-avatar")
     public JsonResult<String> updateAvatar(HttpServletRequest request, @RequestParam("avatar") MultipartFile avatar) {
         String token = request.getHeader("Authorization");
@@ -67,7 +84,12 @@ public class UserController {
             return JsonResult.error("上传头像失败");
         }
     }
-
+    /**
+     * Query user info.
+     *
+     * @param request Http request
+     * @return Info of queried user.
+     */
     @GetMapping("/query")
     public JsonResult<UserInfoEntity> getUserInfo(HttpServletRequest request) {
         String token = request.getHeader("Authorization");

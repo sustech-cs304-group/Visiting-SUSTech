@@ -1,0 +1,100 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="zh"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>ForumResourceController.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">Visiting-SUSTech</a> &gt; <a href="index.source.html" class="el_package">com.sustech.cs304.visitingsustech.controller</a> &gt; <span class="el_source">ForumResourceController.java</span></div><h1>ForumResourceController.java</h1><pre class="source lang-java linenums">package com.sustech.cs304.visitingsustech.controller;
+
+import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
+import com.baomidou.mybatisplus.core.conditions.update.UpdateWrapper;
+import com.sustech.cs304.visitingsustech.common.JsonResult;
+import com.sustech.cs304.visitingsustech.entity.*;
+import com.sustech.cs304.visitingsustech.exception.BaseException;
+import com.sustech.cs304.visitingsustech.mapper.AppointmentMapper;
+import com.sustech.cs304.visitingsustech.mapper.ForumMapper;
+import com.sustech.cs304.visitingsustech.service.*;
+import com.sustech.cs304.visitingsustech.util.JwtUtil;
+import com.sustech.cs304.visitingsustech.vo.AppointmentVo;
+import com.sustech.cs304.visitingsustech.vo.ForumVo;
+import jakarta.servlet.http.HttpServletRequest;
+import org.springframework.beans.BeanUtils;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
+
+import javax.swing.*;
+import java.io.File;
+import java.io.IOException;
+import java.util.List;
+import java.util.Map;
+import java.util.Objects;
+import java.util.UUID;
+
+/**
+ * For forumResource operations.
+ *
+ * @author pound
+ */
+@RestController
+@RequestMapping(&quot;/forumresource&quot;)
+<span class="fc" id="L36">public class ForumResourceController {</span>
+    @Autowired
+    private ForumService forumService;
+    @Autowired
+    private ForumMapper forumMapper;
+    @Autowired
+    private ForumResourceService forumResourceService;
+    @Autowired
+    private CommentService commentService;
+    @Autowired
+    private ForumLikeService forumLikeService;
+    @Autowired
+    private UserService userService;
+    @Autowired
+    private JwtUtil jwtUtil;
+    @Value(&quot;${spring.servlet.multipart.location}&quot;)
+    private String path;
+
+    /**
+     * Add a forum resources to a forum.
+     *
+     * @param forumId Like for which forum
+     * @param request Http request
+     * @return Message of success or fail
+     */
+    @PostMapping(&quot;/add&quot;)
+    public JsonResult&lt;String&gt; addForumResource(HttpServletRequest request, List&lt;MultipartFile&gt; multipartFiles,
+                                               Integer forumId){
+<span class="nc" id="L64">        String token = request.getHeader(&quot;Authorization&quot;);</span>
+<span class="nc" id="L65">        String openid = jwtUtil.getOpenidFromToken(token);</span>
+<span class="nc" id="L66">        String url = request.getScheme() + &quot;://&quot; + request.getServerName() + &quot;:&quot; + request.getServerPort() + &quot;/images/&quot;;</span>
+<span class="nc" id="L67">        File file = new File(path);</span>
+<span class="nc bnc" id="L68" title="All 2 branches missed.">        if (!file.exists())</span>
+<span class="nc" id="L69">            file.mkdirs();</span>
+<span class="nc bnc" id="L70" title="All 2 branches missed.">        for (MultipartFile multipartFile : multipartFiles) {</span>
+            try {
+<span class="nc" id="L72">                String suffix = Objects.requireNonNull(multipartFile.getOriginalFilename()).substring(multipartFile.getOriginalFilename().lastIndexOf(&quot;.&quot;));</span>
+<span class="nc" id="L73">                String newFileName = UUID.randomUUID().toString().replaceAll(&quot;-&quot;, &quot;&quot;) + suffix;</span>
+<span class="nc" id="L74">                multipartFile.transferTo(new File(path + newFileName));</span>
+<span class="nc" id="L75">                String newUrl = url + newFileName;</span>
+<span class="nc bnc" id="L76" title="All 2 branches missed.">                if (forumResourceService.addForumResource(forumId, newUrl) &lt;= 0)</span>
+<span class="nc" id="L77">                    return JsonResult.error(&quot;添加失败&quot;);</span>
+<span class="nc" id="L78">            } catch (BaseException e) {</span>
+<span class="nc" id="L79">                return JsonResult.error(e.getStatus(), e.getMessage());</span>
+<span class="nc" id="L80">            } catch (IOException e) {</span>
+<span class="nc" id="L81">                return JsonResult.error(&quot;添加失败&quot;);</span>
+<span class="nc" id="L82">            }</span>
+<span class="nc" id="L83">        }</span>
+<span class="nc" id="L84">        return JsonResult.success(200, &quot;添加成功&quot;, url);</span>
+    }
+
+//    @GetMapping(&quot;/query&quot;)
+//    public JsonResult&lt;List&lt;ForumResourceEntity&gt;&gt; getForumResource(HttpServletRequest request, Integer forumId) {
+//        String token = request.getHeader(&quot;Authorization&quot;);
+//        String openid = jwtUtil.getOpenidFromToken(token);
+////        List&lt;ForumEntity&gt; forumEntities = forumService.getForum(openid);
+////        for (ForumEntity forumEntity : forumEntities) {
+////            List&lt;ForumResourceEntity&gt; forumResourceEntities = forumResourceService.getForumResource(forumEntity.getId());
+////            List&lt;CommentEntity&gt; commentEntities = commentService.getComment(forumEntity.getId());
+////            List&lt;ForumLikeEntity&gt; forumLikeEntities = forumLikeService.getForumLike(forumEntity.getId());
+////        }
+//        return JsonResult.success(forumResourceService.getForumResource(forumId));
+//    }
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.9.202303310957</span></div></body></html>

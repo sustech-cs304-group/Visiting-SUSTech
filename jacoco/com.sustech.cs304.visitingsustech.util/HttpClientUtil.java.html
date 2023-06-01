@@ -1,0 +1,134 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="zh"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>HttpClientUtil.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">Visiting-SUSTech</a> &gt; <a href="index.source.html" class="el_package">com.sustech.cs304.visitingsustech.util</a> &gt; <span class="el_source">HttpClientUtil.java</span></div><h1>HttpClientUtil.java</h1><pre class="source lang-java linenums">package com.sustech.cs304.visitingsustech.util;
+
+import org.apache.http.HttpStatus;
+import org.apache.http.NameValuePair;
+import org.apache.http.client.entity.UrlEncodedFormEntity;
+import org.apache.http.client.methods.CloseableHttpResponse;
+import org.apache.http.client.methods.HttpGet;
+import org.apache.http.client.methods.HttpPost;
+import org.apache.http.client.utils.URIBuilder;
+import org.apache.http.entity.StringEntity;
+import org.apache.http.impl.client.CloseableHttpClient;
+import org.apache.http.impl.client.HttpClients;
+import org.apache.http.message.BasicNameValuePair;
+import org.apache.http.util.EntityUtils;
+
+import java.io.IOException;
+import java.net.URI;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Map;
+
+/**
+ * Details of httpClient operation handling.
+ *
+ * @author sui_h
+ */
+public class HttpClientUtil {
+
+    private HttpClientUtil() {
+    }
+
+    public static String doGet(String url, Map&lt;String, String&gt; param) {
+<span class="nc" id="L33">        CloseableHttpClient httpclient = HttpClients.createDefault();</span>
+<span class="nc" id="L34">        String resultString = &quot;&quot;;</span>
+<span class="nc" id="L35">        CloseableHttpResponse response = null;</span>
+        try {
+<span class="nc" id="L37">            URIBuilder builder = new URIBuilder(url);</span>
+<span class="nc bnc" id="L38" title="All 2 branches missed.">            if (param != null) {</span>
+<span class="nc bnc" id="L39" title="All 2 branches missed.">                for (String key : param.keySet()) {</span>
+<span class="nc" id="L40">                    builder.addParameter(key, param.get(key));</span>
+<span class="nc" id="L41">                }</span>
+            }
+<span class="nc" id="L43">            URI uri = builder.build();</span>
+<span class="nc" id="L44">            HttpGet httpGet = new HttpGet(uri);</span>
+<span class="nc" id="L45">            response = httpclient.execute(httpGet);</span>
+<span class="nc bnc" id="L46" title="All 2 branches missed.">            if (response.getStatusLine().getStatusCode() == 200) {</span>
+<span class="nc" id="L47">                resultString = EntityUtils.toString(response.getEntity(), &quot;UTF-8&quot;);</span>
+            }
+<span class="nc" id="L49">        } catch (Exception e) {</span>
+<span class="nc" id="L50">            e.printStackTrace();</span>
+        } finally {
+            try {
+<span class="nc bnc" id="L53" title="All 2 branches missed.">                if (response != null) {</span>
+<span class="nc" id="L54">                    response.close();</span>
+                }
+<span class="nc" id="L56">                httpclient.close();</span>
+<span class="nc" id="L57">            } catch (IOException e) {</span>
+<span class="nc" id="L58">                e.printStackTrace();</span>
+<span class="nc" id="L59">            }</span>
+        }
+<span class="nc" id="L61">        return resultString;</span>
+    }
+
+    public static String doGet(String url) {
+<span class="nc" id="L65">        return doGet(url, null);</span>
+    }
+
+    public static String doPost(String url, Map&lt;String, Object&gt; param) {
+<span class="nc" id="L69">        CloseableHttpClient httpClient = HttpClients.createDefault();</span>
+<span class="nc" id="L70">        CloseableHttpResponse response = null;</span>
+<span class="nc" id="L71">        String resultString = &quot;&quot;;</span>
+        try {
+<span class="nc" id="L73">            HttpPost httpPost = new HttpPost(url);</span>
+<span class="nc bnc" id="L74" title="All 2 branches missed.">            if (param != null) {</span>
+<span class="nc" id="L75">                List&lt;NameValuePair&gt; paramList = new ArrayList&lt;&gt;();</span>
+<span class="nc bnc" id="L76" title="All 2 branches missed.">                for (String key : param.keySet()) {</span>
+<span class="nc" id="L77">                    paramList.add(new BasicNameValuePair(key, (String) param.get(key)));</span>
+<span class="nc" id="L78">                }</span>
+<span class="nc" id="L79">                UrlEncodedFormEntity entity = new UrlEncodedFormEntity(paramList);</span>
+<span class="nc" id="L80">                httpPost.setEntity(entity);</span>
+            }
+<span class="nc" id="L82">            response = httpClient.execute(httpPost);</span>
+<span class="nc" id="L83">            resultString = EntityUtils.toString(response.getEntity(), &quot;utf-8&quot;);</span>
+<span class="nc" id="L84">        } catch (Exception e) {</span>
+<span class="nc" id="L85">            e.printStackTrace();</span>
+        } finally {
+            try {
+<span class="nc bnc" id="L88" title="All 2 branches missed.">                if (response != null) {</span>
+<span class="nc" id="L89">                    response.close();</span>
+                }
+<span class="nc" id="L91">                httpClient.close();</span>
+<span class="nc" id="L92">            } catch (IOException e) {</span>
+<span class="nc" id="L93">                e.printStackTrace();</span>
+<span class="nc" id="L94">            }</span>
+        }
+<span class="nc" id="L96">        return resultString;</span>
+    }
+
+    public static String doPost(String url) {
+<span class="nc" id="L100">        return doPost(url, null);</span>
+    }
+
+    public static String doPostJson(String url, String json, String token_header) throws Exception {
+<span class="nc" id="L104">        CloseableHttpClient httpClient = HttpClients.createDefault();</span>
+<span class="nc" id="L105">        CloseableHttpResponse response = null;</span>
+<span class="nc" id="L106">        String resultString = &quot;&quot;;</span>
+        try {
+<span class="nc" id="L108">            HttpPost httpPost = new HttpPost(url);</span>
+<span class="nc" id="L109">            httpPost.setHeader(&quot;HTTP Method&quot;, &quot;POST&quot;);</span>
+<span class="nc" id="L110">            httpPost.setHeader(&quot;Connection&quot;, &quot;Keep-Alive&quot;);</span>
+<span class="nc" id="L111">            httpPost.setHeader(&quot;Content-Type&quot;, &quot;application/json;charset=utf-8&quot;);</span>
+<span class="nc" id="L112">            httpPost.setHeader(&quot;x-authentication-token&quot;, token_header);</span>
+<span class="nc" id="L113">            StringEntity entity = new StringEntity(json);</span>
+<span class="nc" id="L114">            entity.setContentType(&quot;application/json;charset=utf-8&quot;);</span>
+<span class="nc" id="L115">            httpPost.setEntity(entity);</span>
+<span class="nc" id="L116">            response = httpClient.execute(httpPost);</span>
+<span class="nc bnc" id="L117" title="All 2 branches missed.">            if (response.getStatusLine().getStatusCode() == HttpStatus.SC_OK) {</span>
+<span class="nc" id="L118">                resultString = EntityUtils.toString(response.getEntity(), &quot;UTF-8&quot;);</span>
+            }
+<span class="nc" id="L120">        } catch (Exception e) {</span>
+<span class="nc" id="L121">            throw e;</span>
+        } finally {
+            try {
+<span class="nc bnc" id="L124" title="All 2 branches missed.">                if (response != null) {</span>
+<span class="nc" id="L125">                    response.close();</span>
+                }
+<span class="nc" id="L127">            } catch (IOException e) {</span>
+<span class="nc" id="L128">                e.printStackTrace();</span>
+<span class="nc" id="L129">            }</span>
+        }
+<span class="nc" id="L131">        return resultString;</span>
+    }
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.9.202303310957</span></div></body></html>

@@ -19,6 +19,11 @@ import org.springframework.web.bind.annotation.RestController;
 import java.util.HashMap;
 import java.util.Map;
 
+/**
+ * For login.
+ *
+ * @author pound
+ */
 @RestController
 @RequestMapping("/user")
 public class WxLoginController {
@@ -28,7 +33,12 @@ public class WxLoginController {
     @Autowired
     private JwtUtil jwtUtil;
     private static final ObjectMapper objectMapper = new ObjectMapper();
-
+    /**
+     * Login authorization.
+     *
+     * @param code User code
+     * @return Message of success or fail
+     */
     @PostMapping("/index/login")
     public JsonResult<Map<String, String>> authorizeLogin(@NotBlank @RequestParam("code") String code) {
         JsonNode jsonResult = UserInfoUtil.getResultJson(code);

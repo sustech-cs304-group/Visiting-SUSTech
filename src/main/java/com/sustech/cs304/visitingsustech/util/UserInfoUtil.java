@@ -7,6 +7,11 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import java.util.HashMap;
 import java.util.Map;
 
+/**
+ * Details of user info handling.
+ *
+ * @author sui_h
+ */
 public class UserInfoUtil {
     public static final String WX_LOGIN_URL = "https://api.weixin.qq.com/sns/jscode2session";
     public static final String WX_LOGIN_APPID = "wx64166ba63297087b";

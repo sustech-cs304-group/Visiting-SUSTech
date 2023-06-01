@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="zh"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>ForumLikeServiceImpl.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">Visiting-SUSTech</a> &gt; <a href="index.source.html" class="el_package">com.sustech.cs304.visitingsustech.service.impl</a> &gt; <span class="el_source">ForumLikeServiceImpl.java</span></div><h1>ForumLikeServiceImpl.java</h1><pre class="source lang-java linenums">package com.sustech.cs304.visitingsustech.service.impl;
+
+import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
+import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
+import com.sustech.cs304.visitingsustech.entity.*;
+import com.sustech.cs304.visitingsustech.exception.AppointmentException;
+import com.sustech.cs304.visitingsustech.exception.BaseException;
+import com.sustech.cs304.visitingsustech.mapper.ForumLikeMapper;
+import com.sustech.cs304.visitingsustech.mapper.ForumMapper;
+import com.sustech.cs304.visitingsustech.mapper.ForumResourceMapper;
+import com.sustech.cs304.visitingsustech.mapper.UserInfoMapper;
+import com.sustech.cs304.visitingsustech.service.ForumLikeService;
+import com.sustech.cs304.visitingsustech.service.ForumResourceService;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+
+import java.util.ArrayList;
+import java.util.List;
+
+/**
+ * Implementation of forumLike service.
+ *
+ * @author pound
+ */
+@Service
+<span class="fc" id="L26">public class ForumLikeServiceImpl extends ServiceImpl&lt;ForumLikeMapper, ForumLikeEntity&gt; implements ForumLikeService {</span>
+    @Autowired
+    private ForumMapper forumMapper;
+    @Autowired
+    private UserInfoMapper userInfoMapper;
+    @Autowired
+    private ForumLikeMapper forumLikeMapper;
+
+    @Override
+    public int addForumLike(ForumLikeEntity forumLikeEntity) {
+<span class="fc" id="L36">        UserInfoEntity userInfoEntity = userInfoMapper.selectById(forumLikeEntity.getOpenid());</span>
+<span class="pc bpc" id="L37" title="1 of 2 branches missed.">        if (userInfoEntity == null)</span>
+<span class="nc" id="L38">            throw new BaseException(&quot;Invalid userID&quot;, 400);</span>
+<span class="fc" id="L39">        QueryWrapper&lt;ForumLikeEntity&gt; wrapper = new QueryWrapper&lt;ForumLikeEntity&gt;()</span>
+<span class="fc" id="L40">                .eq(&quot;openid&quot;, forumLikeEntity.getOpenid())</span>
+<span class="fc" id="L41">                .eq(&quot;forum_id&quot;, forumLikeEntity.getForumId());</span>
+<span class="pc bpc" id="L42" title="1 of 2 branches missed.">        if (forumLikeMapper.selectList(wrapper).size() &gt; 0)</span>
+<span class="nc" id="L43">            throw new BaseException(&quot;Multiple likes&quot;, 400);</span>
+<span class="fc" id="L44">        return forumLikeMapper.insert(forumLikeEntity);</span>
+    }
+
+    @Override
+    public List&lt;ForumLikeEntity&gt; getForumLike(Integer forumId) {
+<span class="fc" id="L49">        ForumEntity forumEntity = forumMapper.selectById(forumId);</span>
+<span class="pc bpc" id="L50" title="1 of 2 branches missed.">        if (forumEntity == null)</span>
+<span class="nc" id="L51">            throw new BaseException(&quot;Invalid forumID&quot;, 400);</span>
+        QueryWrapper&lt;ForumLikeEntity&gt; forumLikeWrapper;
+<span class="fc" id="L53">        forumLikeWrapper = new QueryWrapper&lt;ForumLikeEntity&gt;().eq(&quot;forum_id&quot;, forumId);</span>
+<span class="fc" id="L54">        return forumLikeMapper.selectList(forumLikeWrapper);</span>
+    }
+
+    @Override
+    public List&lt;String&gt; getLikeNames(Integer forumId) {
+<span class="fc" id="L59">        ForumEntity forumEntity = forumMapper.selectById(forumId);</span>
+<span class="pc bpc" id="L60" title="1 of 2 branches missed.">        if (forumEntity == null)</span>
+<span class="nc" id="L61">            throw new BaseException(&quot;Invalid forumID&quot;, 400);</span>
+        QueryWrapper&lt;ForumLikeEntity&gt; forumLikeWrapper;
+<span class="fc" id="L63">        forumLikeWrapper = new QueryWrapper&lt;ForumLikeEntity&gt;().eq(&quot;forum_id&quot;, forumId);</span>
+<span class="fc" id="L64">        List&lt;ForumLikeEntity&gt; forumLikeEntities = forumLikeMapper.selectList(forumLikeWrapper);</span>
+<span class="fc" id="L65">        List&lt;String&gt; names = new ArrayList&lt;&gt;();</span>
+<span class="fc bfc" id="L66" title="All 2 branches covered.">        for (ForumLikeEntity forumLikeEntity : forumLikeEntities) {</span>
+<span class="fc" id="L67">            names.add(forumLikeEntity.getNickname());</span>
+<span class="fc" id="L68">        }</span>
+<span class="fc" id="L69">        return names;</span>
+    }
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.9.202303310957</span></div></body></html>
