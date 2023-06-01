@@ -10,7 +10,7 @@
     </parent>
     <groupId>com.sustech.cs304</groupId>
     <artifactId>Visiting-SUSTech</artifactId>
-    <version>0.0.1-SNAPSHOT</version>
+    <version>1.0.0-RELEASE</version>
     <name>Visiting-SUSTech</name>
     <description>Visiting-SUSTech</description>
     <properties>
